@@ -14,3 +14,7 @@ Build
 *.suo
 *.xcodeproj
 *.xcworkspace
+*.xml
+.vsconfig
+*.user
+GAS_RPG.uproject.DotSettings.user

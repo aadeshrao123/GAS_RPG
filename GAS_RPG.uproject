@@ -3,6 +3,16 @@
 	"EngineAssociation": "{EE97E491-43AA-9201-9E59-5E91F84559D3}",
 	"Category": "",
 	"Description": "",
+	"Modules": [
+		{
+			"Name": "GAS_RPG",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "ModelingToolsEditorMode",

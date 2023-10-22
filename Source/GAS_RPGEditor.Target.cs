@@ -9,7 +9,6 @@ public class GAS_RPGEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
-
 		ExtraModuleNames.AddRange( new string[] { "GAS_RPG" } );
 	}
 }

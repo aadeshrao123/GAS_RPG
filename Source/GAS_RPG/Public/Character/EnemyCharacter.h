@@ -16,6 +16,9 @@ class GAS_RPG_API AEnemyCharacter : public ARPG_BaseCharacter, public IEnemyInte
 	GENERATED_BODY()
 
 public:
+	
+	AEnemyCharacter();
+	
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
 

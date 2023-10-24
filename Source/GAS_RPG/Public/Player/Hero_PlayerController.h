@@ -9,6 +9,7 @@
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
+class IEnemyInterface;
 /**
  * 
  */
@@ -19,6 +20,7 @@ class GAS_RPG_API AHero_PlayerController : public APlayerController
 
 public:
 	AHero_PlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
 
 protected:
 	virtual  void BeginPlay() override;
@@ -31,6 +33,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	void Move(const FInputActionValue& InputActionValue); 
-	
+	void Move(const FInputActionValue& InputActionValue);
+
+	void CursorTrace();
+	IEnemyInterface* LastActor;
+	IEnemyInterface* ThisActor;
 };

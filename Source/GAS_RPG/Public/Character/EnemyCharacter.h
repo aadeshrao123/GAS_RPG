@@ -18,5 +18,8 @@ class GAS_RPG_API AEnemyCharacter : public ARPG_BaseCharacter, public IEnemyInte
 public:
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bHighlighted = false;
 	
 };

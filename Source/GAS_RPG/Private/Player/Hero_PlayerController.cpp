@@ -5,10 +5,17 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interaction/EnemyInterface.h"
 
 AHero_PlayerController::AHero_PlayerController()
 {
 	bReplicates = true; // For Making our Controller Replicate
+}
+
+void AHero_PlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	CursorTrace();
 }
 
 void AHero_PlayerController::BeginPlay()
@@ -29,6 +36,28 @@ void AHero_PlayerController::BeginPlay()
 	SetInputMode(InputModeData);// For setting our desired input data
 	
 }
+
+void AHero_PlayerController::CursorTrace()
+{
+	FHitResult HitResultUnderCursor;
+	GetHitResultUnderCursor(ECC_Visibility, false, HitResultUnderCursor);
+	if (!HitResultUnderCursor.bBlockingHit) return;
+
+
+	LastActor = ThisActor;
+	ThisActor = Cast<IEnemyInterface>(HitResultUnderCursor.GetActor());
+
+	if (ThisActor && ThisActor != LastActor)
+	{
+		ThisActor->HighlightActor();
+	}
+
+	if (LastActor && ThisActor != LastActor)
+	{
+		LastActor->UnHighlightActor();
+	}
+}
+
 
 void AHero_PlayerController::SetupInputComponent()
 {
@@ -53,5 +82,5 @@ void AHero_PlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y); // For Moving our Pawn Forward and Backward
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X); // For Moving our Pawn Right and Left
 	}
-	
 }
+

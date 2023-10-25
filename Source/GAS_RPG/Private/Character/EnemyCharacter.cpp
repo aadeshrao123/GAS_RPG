@@ -3,11 +3,18 @@
 
 #include "Character/EnemyCharacter.h"
 
+#include "AbilitySystem/Base_AbilitySystemComponent.h"
+#include "AbilitySystem/Base_AttributeSet.h"
 #include "GAS_RPG/GAS_RPG.h"
 
 AEnemyCharacter::AEnemyCharacter()
 {
 	GetMesh()->GetCollisionResponseToChannel(ECC_Visibility);
+
+	AbilitySystemComponent = CreateDefaultSubobject<UBase_AbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+
+	AttributeSet = CreateDefaultSubobject<UBase_AttributeSet>("AttributeSet");
 }
 
 void AEnemyCharacter::HighlightActor()

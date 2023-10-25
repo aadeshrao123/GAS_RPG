@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "RPG_BaseCharacter.generated.h"
 
+class UAttributeSet;
+class UAbilitySystemComponent;
+
 UCLASS()
 class GAS_RPG_API ARPG_BaseCharacter : public ACharacter
 {
@@ -19,5 +22,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
+
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> AttributeSet; 
 
 };

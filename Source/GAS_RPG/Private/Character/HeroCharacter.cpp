@@ -25,6 +25,11 @@ AHeroCharacter::AHeroCharacter()
 	bUseControllerRotationYaw = false;
 }
 
+UAbilitySystemComponent* AHeroCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();

@@ -7,6 +7,12 @@
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "GAS_RPG/GAS_RPG.h"
 
+void AEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
 AEnemyCharacter::AEnemyCharacter()
 {
 	GetMesh()->GetCollisionResponseToChannel(ECC_Visibility);

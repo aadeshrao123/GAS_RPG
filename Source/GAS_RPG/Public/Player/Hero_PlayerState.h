@@ -29,6 +29,6 @@ protected:
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet; 
-
+	TObjectPtr<UAttributeSet> AttributeSet;
+	
 };

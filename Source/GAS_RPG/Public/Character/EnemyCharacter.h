@@ -15,6 +15,9 @@ class GAS_RPG_API AEnemyCharacter : public ARPG_BaseCharacter, public IEnemyInte
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+	
 public:
 	
 	AEnemyCharacter();

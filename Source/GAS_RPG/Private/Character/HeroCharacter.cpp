@@ -3,9 +3,11 @@
 
 #include "Character/HeroCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/Hero_PlayerState.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -33,4 +35,27 @@ UAbilitySystemComponent* AHeroCharacter::GetAbilitySystemComponent() const
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AHeroCharacter::InitAbilityActorInfo()
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	HeroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(HeroPlayerState, this);
+	AbilitySystemComponent = HeroPlayerState->GetAbilitySystemComponent();
+	AttributeSet = HeroPlayerState->GetAttributeSet();
+}
+
+void AHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// Init Ability for Server
+	InitAbilityActorInfo();
+}
+
+void AHeroCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	// Init Ability for Client
+	InitAbilityActorInfo();
 }

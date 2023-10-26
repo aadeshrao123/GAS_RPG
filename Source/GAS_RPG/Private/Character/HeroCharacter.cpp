@@ -49,7 +49,7 @@ void AHeroCharacter::InitAbilityActorInfo()
 void AHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	// Init Ability for Server
+	// Init Ability for ServerS
 	InitAbilityActorInfo();
 }
 

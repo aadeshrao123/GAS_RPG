@@ -39,7 +39,8 @@ class GAS_RPG_API UHeroWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
-	
+	virtual void BrodcastInitialValues();
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")

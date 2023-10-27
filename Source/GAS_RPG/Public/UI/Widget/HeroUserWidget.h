@@ -23,6 +23,6 @@ public:
 protected:
 	
 	UFUNCTION(BlueprintImplementableEvent)
-	void WidgetControllerSet(); // It will be when our Widget Controller have been set up
+	void WidgetControllerSet(); // It will be called when our Widget Controller have been set up
 
 };

@@ -7,7 +7,9 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/Hero_PlayerController.h"
 #include "Player/Hero_PlayerState.h"
+#include "UI/HUD/HeroHUD.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -44,6 +46,14 @@ void AHeroCharacter::InitAbilityActorInfo()
 	HeroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(HeroPlayerState, this);
 	AbilitySystemComponent = HeroPlayerState->GetAbilitySystemComponent();
 	AttributeSet = HeroPlayerState->GetAttributeSet();
+
+	if (AHero_PlayerController* Hero_PlayerController = Cast<AHero_PlayerController>(GetController()))
+	{
+		if (AHeroHUD* HeroHUD = Cast<AHeroHUD>(Hero_PlayerController->GetHUD())) 
+		{
+			HeroHUD->InitOverlay(Hero_PlayerController, HeroPlayerState, AbilitySystemComponent, AttributeSet); //Calling the add widget to viewport and initializing our widget controller required variables
+		}
+	}
 }
 
 void AHeroCharacter::PossessedBy(AController* NewController)

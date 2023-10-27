@@ -24,8 +24,10 @@ void AHero_PlayerController::BeginPlay()
 	check(HeroInputMappingContext); // For Check if its valid or not
 
 	UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());// For Getting our Local Player Enhanced Sub System
-	check(SubSystem);
-	SubSystem->AddMappingContext(HeroInputMappingContext, 0); //Setting our Created Input Mapping Context
+	if(SubSystem)
+	{
+		SubSystem->AddMappingContext(HeroInputMappingContext, 0); //Setting our Created Input Mapping Context
+	}
 
 	bShowMouseCursor = true; // For Showing our Mouse Cursor While Playing
 	DefaultMouseCursor = EMouseCursor::Default; // For Choosing our Mouse cursor style

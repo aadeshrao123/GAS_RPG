@@ -40,6 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 	virtual void BrodcastInitialValues();
+	virtual void BindCallbacksTODependencies();
 
 protected:
 

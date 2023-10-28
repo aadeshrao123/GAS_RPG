@@ -15,3 +15,8 @@ void UHeroWidgetController::BrodcastInitialValues()
 {
 	
 }
+
+void UHeroWidgetController::BindCallbacksTODependencies()
+{
+	
+}

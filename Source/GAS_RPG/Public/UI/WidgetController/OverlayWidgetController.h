@@ -19,10 +19,15 @@ class GAS_RPG_API UOverlayWidgetController : public UHeroWidgetController
 
 public:
 	virtual void BrodcastInitialValues() override;
+	virtual void BindCallbacksTODependencies() override;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnHealthChangedSignature OnHealthChanged;
 	
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnMaxHealthChangedSignature OnMaxHealthChanged;
+
+protected:
+	void HealthChanged(const FOnAttributeChangeData& Data) const;
+	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
 };

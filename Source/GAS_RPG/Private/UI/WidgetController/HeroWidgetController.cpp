@@ -11,7 +11,7 @@ void UHeroWidgetController::SetWidgetControllerParams(const FWidgetControllerPar
 	AttributeSet = WCParams.AttributeSet;
 }
 
-void UHeroWidgetController::BrodcastInitialValues()
+void UHeroWidgetController::BroadcastInitialValues()
 {
 	
 }

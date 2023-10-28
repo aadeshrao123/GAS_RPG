@@ -34,6 +34,7 @@ void AAffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent,
 		
 		UBase_AttributeSet* MutableHeroAttributeSet = const_cast<UBase_AttributeSet*>(HeroAttributeSet);
 		MutableHeroAttributeSet->SetHealth(HeroAttributeSet->GetHealth() + 25.f);
+		MutableHeroAttributeSet->SetMana(HeroAttributeSet->GetMana() + 25.f);
 		
 		Destroy();
 	}

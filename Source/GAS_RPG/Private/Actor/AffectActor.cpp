@@ -17,10 +17,10 @@ void AAffectActor::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AAffectActor::ApplyEffectTOTarget(AActor* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+void AAffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
-	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
-	if (TargetASC) return;
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	if (!TargetASC) return;
 	
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);

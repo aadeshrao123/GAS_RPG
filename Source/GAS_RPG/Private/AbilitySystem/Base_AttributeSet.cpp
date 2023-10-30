@@ -23,6 +23,24 @@ void UBase_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	
 }
 
+void UBase_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	Super::PreAttributeChange(Attribute, NewValue);
+
+	if (Attribute == GetHealthAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
+		UE_LOG(LogTemp, Warning, TEXT("HealthValue: %f"), NewValue );
+	}
+	if (Attribute == GetManaAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
+		UE_LOG(LogTemp, Warning, TEXT("ManaValue: %f"), NewValue );
+
+	}
+	
+}
+
 void UBase_AttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, Health, OldHealth);

@@ -17,3 +17,7 @@ void ARPG_BaseCharacter::BeginPlay()
 	
 }
 
+void ARPG_BaseCharacter::InitAbilityActorInfo()
+{
+}
+

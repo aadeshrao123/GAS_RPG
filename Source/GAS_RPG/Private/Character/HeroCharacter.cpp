@@ -4,6 +4,7 @@
 #include "Character/HeroCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -44,6 +45,7 @@ void AHeroCharacter::InitAbilityActorInfo()
 	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
 	check(HeroPlayerState);
 	HeroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(HeroPlayerState, this);
+	Cast<UBase_AbilitySystemComponent>(HeroPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = HeroPlayerState->GetAbilitySystemComponent();
 	AttributeSet = HeroPlayerState->GetAttributeSet();
 

@@ -10,7 +10,7 @@
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	InitAbilityActorInfo();
 }
 
 AEnemyCharacter::AEnemyCharacter()
@@ -39,4 +39,12 @@ void AEnemyCharacter::UnHighlightActor()
 	bHighlighted = false;
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AEnemyCharacter::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+
 }

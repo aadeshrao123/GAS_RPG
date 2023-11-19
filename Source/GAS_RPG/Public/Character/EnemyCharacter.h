@@ -17,6 +17,7 @@ class GAS_RPG_API AEnemyCharacter : public ARPG_BaseCharacter, public IEnemyInte
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void InitAbilityActorInfo() override;
 	
 public:
 	
@@ -27,5 +28,4 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlighted = false;
-	
 };

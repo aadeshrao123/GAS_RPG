@@ -24,12 +24,14 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(BaseAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 	
 	Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-	[](const FGameplayTagContainer& AssetTag)
+	[this](const FGameplayTagContainer& AssetTag)
 	{
 		for (FGameplayTag Tag : AssetTag)
 		{
 			FString TagName = FString::Printf(TEXT("GE Tag Name %s"), *Tag.ToString());
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TagName);
+
+			GetDataTableByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 		}
 	}
 	);

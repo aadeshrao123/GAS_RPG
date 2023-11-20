@@ -13,9 +13,5 @@ void UBase_AbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Abilit
 {
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
-	for (FGameplayTag Tag : TagContainer)
-	{
-		FString TagName = FString::Printf(TEXT("GE Tag Name %s"), *Tag.ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TagName);
-	}
+	EffectAssetTags.Broadcast(TagContainer);
 }

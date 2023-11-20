@@ -6,9 +6,12 @@
 #include "AbilitySystemComponent.h"
 #include "Base_AbilitySystemComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /*AssetTags*/);
+
 /**
  * 
  */
+
 UCLASS()
 class GAS_RPG_API UBase_AbilitySystemComponent : public UAbilitySystemComponent
 {
@@ -16,7 +19,7 @@ class GAS_RPG_API UBase_AbilitySystemComponent : public UAbilitySystemComponent
 
 public:
 	void AbilityActorInfoSet();
-
+	FEffectAssetTags EffectAssetTags;
 protected:
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffect);
 	

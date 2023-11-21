@@ -86,6 +86,18 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
 
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+		UE_LOG(LogTemp, Warning, TEXT("HealthValue: %f"), GetHealth() );
+	}
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+		UE_LOG(LogTemp, Warning, TEXT("ManaValue: %f"), GetMana());
+
+	}
+
 }
 
 void UBase_AttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

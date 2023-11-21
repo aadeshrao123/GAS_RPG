@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "RPG_BaseCharacter.generated.h"
 
+class UGameplayEffect;
 class UAttributeSet;
 class UAbilitySystemComponent;
 
@@ -16,6 +17,8 @@ class GAS_RPG_API ARPG_BaseCharacter : public ACharacter
 
 public:
 	ARPG_BaseCharacter();
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	UAttributeSet* GetAttributeSet() const {return AttributeSet; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -30,5 +33,10 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	virtual void InitAbilityActorInfo();
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+
+	void InitializePrimaryAttributes() const;
 
 };

@@ -24,6 +24,12 @@ void UBase_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, Resilience, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, Vigor, COND_None, REPNOTIFY_Always);
 	
 }
 
@@ -44,8 +50,6 @@ void UBase_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute,
 	}
 	
 }
-
-
 
 void UBase_AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
 {
@@ -118,4 +122,24 @@ void UBase_AttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 void UBase_AttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, MaxMana, OldMaxMana);
+}
+
+void UBase_AttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, Strength, OldStrength);
+}
+
+void UBase_AttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, Strength, OldIntelligence);
+}
+
+void UBase_AttributeSet::OnRep_Resilience(const FGameplayAttributeData& OldResilience) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, Strength, OldResilience);
+}
+
+void UBase_AttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, Strength, OldVigor);
 }

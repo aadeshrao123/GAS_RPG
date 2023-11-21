@@ -56,6 +56,7 @@ void AHeroCharacter::InitAbilityActorInfo()
 			HeroHUD->InitOverlay(Hero_PlayerController, HeroPlayerState, AbilitySystemComponent, AttributeSet); //Calling the add widget to viewport and initializing our widget controller required variables
 		}
 	}
+	InitializePrimaryAttributes();
 }
 
 void AHeroCharacter::PossessedBy(AController* NewController)

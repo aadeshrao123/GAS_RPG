@@ -16,19 +16,19 @@ class UAbilitySystemComponent;
  * 
  */
 UCLASS()
-class GAS_RPG_API AHeroCharacter : public ARPG_BaseCharacter, public IAbilitySystemInterface
+class GAS_RPG_API AHeroCharacter : public ARPG_BaseCharacter
 {
 	GENERATED_BODY()
 
 public:
 	AHeroCharacter();
-
-	//Returns the ability system component to use for this actor. It is living PlayerState's component 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() {return AttributeSet;}
-
 	virtual  void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+
+	//Combat Interface
+	virtual int32 GetPlayerLevel() override;
+	//Combat Interface
+
 
 
 protected:

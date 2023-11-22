@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interaction/CombatInterface.h"
 #include "RPG_BaseCharacter.generated.h"
 
 class UGameplayEffect;
@@ -11,13 +13,13 @@ class UAttributeSet;
 class UAbilitySystemComponent;
 
 UCLASS()
-class GAS_RPG_API ARPG_BaseCharacter : public ACharacter
+class GAS_RPG_API ARPG_BaseCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
 public:
 	ARPG_BaseCharacter();
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const {return AttributeSet; }
 
 protected:

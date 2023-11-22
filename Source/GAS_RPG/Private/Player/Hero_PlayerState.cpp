@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AHero_PlayerState::AHero_PlayerState()
 {
@@ -21,4 +22,16 @@ AHero_PlayerState::AHero_PlayerState()
 UAbilitySystemComponent* AHero_PlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AHero_PlayerState::OnRep_Level(int32 OldLevel)
+{
+	
+}
+
+void AHero_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AHero_PlayerState, Level);
 }

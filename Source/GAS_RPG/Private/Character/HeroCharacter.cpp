@@ -30,11 +30,6 @@ AHeroCharacter::AHeroCharacter()
 	bUseControllerRotationYaw = false;
 }
 
-UAbilitySystemComponent* AHeroCharacter::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
-}
-
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -71,4 +66,12 @@ void AHeroCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 	// Init Ability for Client
 	InitAbilityActorInfo();
+}
+
+int32 AHeroCharacter::GetPlayerLevel()
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->GetPlayerLevel();
+
 }

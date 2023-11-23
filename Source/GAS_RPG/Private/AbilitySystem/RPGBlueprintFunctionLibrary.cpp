@@ -24,3 +24,20 @@ UOverlayWidgetController* URPGBlueprintFunctionLibrary::GetOverlayWidgetControll
 	}
 	return nullptr;
 }
+
+UAttributeMenuWidgetController* URPGBlueprintFunctionLibrary::GetAttributeMenuWidgetController(const UObject* WorldContextObject)
+{
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	{
+		if (AHeroHUD* HeroHUD = Cast<AHeroHUD>(PC->GetHUD()))
+		{
+			AHero_PlayerState* PS = PC->GetPlayerState<AHero_PlayerState>();
+			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
+			UAttributeSet* AS = PS->GetAttributeSet();
+
+			const FWidgetControllerParams WCParams(PC, PS, ASC, AS);
+			return HeroHUD->GetAttributeMenuWidgetController(WCParams);
+		}
+	}
+	return nullptr;
+}

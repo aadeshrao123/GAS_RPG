@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class GAS_RPG_API UAttributeMenuWidgetController : public UHeroWidgetController
 {
 	GENERATED_BODY()

@@ -10,5 +10,5 @@ FRPG_GameplayTags FRPG_GameplayTags::GameplayTags;
 
 void FRPG_GameplayTags::InitializeNativeGameplayTags()
 {
-	UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Armor"));
+	GameplayTags.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Armor"));
 }

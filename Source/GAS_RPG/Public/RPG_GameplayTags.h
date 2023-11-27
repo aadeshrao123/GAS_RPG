@@ -32,8 +32,8 @@ public:
 	FGameplayTag Attributes_Secondary_CriticalHitResistance; // Represents the secondary attribute for Critical Hit Resistance, reducing damage taken from critical hits.
 	FGameplayTag Attributes_Secondary_HealthRegeneration; // Represents the secondary attribute for Health Regeneration, the rate at which health is restored over time.
 	FGameplayTag Attributes_Secondary_ManaRegeneration; // Represents the secondary attribute for Mana Regeneration, the rate at which mana is restored over time.
-	FGameplayTag Attributes_Vital_MaxHealth; // Represents the vital attribute for Maximum Health, the total health pool.
-	FGameplayTag Attributes_Vital_MaxMana; // Represents the vital attribute for Maximum Mana, the total mana pool.
+	FGameplayTag Attributes_Secondary_MaxHealth; // Represents the vital attribute for Maximum Health, the total health pool.
+	FGameplayTag Attributes_Secondary_MaxMana; // Represents the vital attribute for Maximum Mana, the total mana pool.
 	
 protected:
 

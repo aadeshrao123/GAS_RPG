@@ -10,6 +10,17 @@
 void UAttributeMenuWidgetController::BindCallbacksTODependencies()
 {
 	Super::BindCallbacksTODependencies();
+	UBase_AttributeSet* AS = Cast<UBase_AttributeSet>(AttributeSet);
+
+	for (auto Pair : AS->TagsToAttribute)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
+		[this, Pair](const FOnAttributeChangeData& Data)
+		{
+			BroadcastInitialInfo(Pair.Key, Pair.Value());
+		}
+		);
+	}
 }
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
@@ -17,10 +28,19 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	UBase_AttributeSet* AS = Cast<UBase_AttributeSet>(AttributeSet);
 
 	check(AttributeInfo);
-	FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FRPG_GameplayTags::Get().Attributes_Primary_Strength);
-	Info.AttributeValue = 	AS->GetStrength();
 
+	for (auto Pair : AS->TagsToAttribute)
+	{
+		BroadcastInitialInfo(Pair.Key, Pair.Value());
+	}
+	
+}
+
+void UAttributeMenuWidgetController::BroadcastInitialInfo(const FGameplayTag& AttributeTag,
+	const FGameplayAttribute& Attribute) const
+{
+	FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
+	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
 	AttributeInfoDelegate.Broadcast(Info);
 
-	
 }

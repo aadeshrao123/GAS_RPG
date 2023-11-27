@@ -53,6 +53,12 @@ struct FEffectProperties
 /**
  * 
  */
+
+typedef TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr AttributeFunctionPtr;
+
+template<class T>
+using TStaticFUncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 UCLASS()
 class GAS_RPG_API UBase_AttributeSet : public UAttributeSet
 {
@@ -63,6 +69,8 @@ public:
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual  void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+	TMap<FGameplayTag, TStaticFUncPtr<FGameplayAttribute()>> TagsToAttribute;
 	
 	//Vital Attributes
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")

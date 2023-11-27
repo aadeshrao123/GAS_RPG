@@ -4,6 +4,7 @@
 #include "Character/RPG_BaseCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/Base_AbilitySystemComponent.h"
 
 ARPG_BaseCharacter::ARPG_BaseCharacter()
 {
@@ -43,5 +44,14 @@ void ARPG_BaseCharacter::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void ARPG_BaseCharacter::AddCharacterAbilities()
+{
+	UBase_AbilitySystemComponent* ASC = Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent);
+	if (!HasAuthority()) return;
+
+	ASC->AddCharacterAbilities(StartupAbility);
+	
 }
 

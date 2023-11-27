@@ -59,6 +59,7 @@ void AHeroCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	// Init Ability for ServerS
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void AHeroCharacter::OnRep_PlayerState()

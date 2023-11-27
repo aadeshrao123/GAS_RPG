@@ -34,9 +34,15 @@ public:
 	FGameplayTag Attributes_Secondary_ManaRegeneration; // Represents the secondary attribute for Mana Regeneration, the rate at which mana is restored over time.
 	FGameplayTag Attributes_Secondary_MaxHealth; // Represents the vital attribute for Maximum Health, the total health pool.
 	FGameplayTag Attributes_Secondary_MaxMana; // Represents the vital attribute for Maximum Mana, the total mana pool.
-	
-protected:
 
+	//InputTags
+	FGameplayTag InputTag_LMB;
+	FGameplayTag InputTag_RMB;
+	FGameplayTag InputTag_1;
+	FGameplayTag InputTag_2;
+	FGameplayTag InputTag_3;
+	FGameplayTag InputTag_4;
+	FGameplayTag InputTag_5;
 private:
 	static FRPG_GameplayTags GameplayTags;
 	

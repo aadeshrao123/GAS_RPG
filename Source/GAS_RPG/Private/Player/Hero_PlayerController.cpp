@@ -4,7 +4,7 @@
 #include "Player/Hero_PlayerController.h"
 
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/RPGInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 AHero_PlayerController::AHero_PlayerController()
@@ -60,14 +60,31 @@ void AHero_PlayerController::CursorTrace()
 	}
 }
 
+void AHero_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Blue, *InputTag.ToString());
+}
+
+void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Red, *InputTag.ToString());
+}
+
+void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Yellow, *InputTag.ToString());
+}
+
 
 void AHero_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent); // casting and  to get our Enhanced Input Component Pointer 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHero_PlayerController::Move);
+	URPGInputComponent* RPGInputComponent = CastChecked<URPGInputComponent>(InputComponent); // casting and  to get our Enhanced Input Component Pointer 
+	RPGInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHero_PlayerController::Move);
 	// Binding our IA_Move Action to our Move Function. So When we press any move key it will call Move Function and Our Character will move accordingly
+
+	RPGInputComponent->BindAbilityAction(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void AHero_PlayerController::Move(const FInputActionValue& InputActionValue)

@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "Hero_PlayerController.generated.h"
 
+class USplineComponent;
 class UBase_AbilitySystemComponent;
 struct FInputActionValue;
 class UInputAction;
@@ -53,4 +54,15 @@ private:
 	TObjectPtr<UBase_AbilitySystemComponent> ASC;
 	
 	UBase_AbilitySystemComponent* GetASC();
+
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.f; //How Long we have pressed the button
+	float ShortPress = 0.5f;
+	bool bAutoRunning = false;
+	bool bTargeting = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f;
+
+	TObjectPtr<USplineComponent> Spline;
 };

@@ -6,13 +6,17 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AutomationTestExcludelist.h"
 #include "EnhancedInputSubsystems.h"
+#include "RPG_GameplayTags.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
+#include "Components/SplineComponent.h"
 #include "Input/RPGInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 AHero_PlayerController::AHero_PlayerController()
 {
 	bReplicates = true; // For Making our Controller Replicate
+
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AHero_PlayerController::PlayerTick(float DeltaTime)
@@ -65,7 +69,11 @@ void AHero_PlayerController::CursorTrace()
 
 void AHero_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	//GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Blue, *InputTag.ToString());
+	if (InputTag.MatchesTagExact(FRPG_GameplayTags::Get().InputTag_LMB))
+	{
+		bTargeting = ThisActor ? true : false;
+		bAutoRunning = false;
+	}
 }
 
 void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
@@ -76,8 +84,33 @@ void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	if (GetASC() == nullptr) return;
-	GetASC()->AbilityInputTagHeld(InputTag);
+	if (!InputTag.MatchesTagExact(FRPG_GameplayTags::Get().InputTag_LMB))
+	{
+		if (GetASC() == nullptr)
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+		return;
+	}
+	if (bTargeting)
+	{
+			GetASC()->AbilityInputTagHeld(InputTag);
+	}
+	else
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+
+		FHitResult Hit;
+		if (GetHitResultUnderCursor(ECC_Visibility, false, Hit))
+		{
+			CachedDestination = Hit.ImpactPoint;
+		}
+		if (APawn* ControlledPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+			ControlledPawn->AddMovementInput(WorldDirection);
+		}
+	}
 }
 
 UBase_AbilitySystemComponent* AHero_PlayerController::GetASC()
@@ -104,7 +137,7 @@ void AHero_PlayerController::SetupInputComponent()
 void AHero_PlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>(); // Getting our FVector 2D from our Input Action
-	const FRotator ControlRotaion = GetControlRotation();// Storing our Control Rotation in local variable
+	const FRotator ControlRotation = GetControlRotation();// Storing our Control Rotation in local variable
 	const FRotator YawRotation (0.f, ControlRotaion.Yaw, 0.f); // For getting only Yaw value from our control rotation
 
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y); // For Getting our Forward Direction

@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "Hero_PlayerController.generated.h"
 
+class UBase_AbilitySystemComponent;
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
@@ -48,4 +49,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<URPGInputConfig> InputConfig;
+
+	TObjectPtr<UBase_AbilitySystemComponent> ASC;
+	
+	UBase_AbilitySystemComponent* GetASC();
 };

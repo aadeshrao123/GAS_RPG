@@ -3,7 +3,10 @@
 
 #include "Player/Hero_PlayerController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AutomationTestExcludelist.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "Input/RPGInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
@@ -62,17 +65,28 @@ void AHero_PlayerController::CursorTrace()
 
 void AHero_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Blue, *InputTag.ToString());
+	//GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Blue, *InputTag.ToString());
 }
 
 void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Red, *InputTag.ToString());
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagReleased(InputTag);
 }
 
 void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Yellow, *InputTag.ToString());
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UBase_AbilitySystemComponent* AHero_PlayerController::GetASC()
+{
+	if (ASC == nullptr)
+	{
+		ASC = Cast<UBase_AbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return ASC;
 }
 
 

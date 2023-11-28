@@ -4,6 +4,7 @@
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 
 #include "RPG_GameplayTags.h"
+#include "AbilitySystem/Abilities/RPGGameplayAbility.h"
 
 void UBase_AbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -18,7 +19,41 @@ void UBase_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 	for (TSubclassOf<UGameplayAbility> Ability : StartupAbility)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability, 1);
-		GiveAbilityAndActivateOnce(AbilitySpec);
+		if (URPGGameplayAbility* GameplayAbility = Cast<URPGGameplayAbility>(AbilitySpec.Ability))
+		{
+			AbilitySpec.DynamicAbilityTags.AddTag(GameplayAbility->StartupTags);
+			GiveAbility(AbilitySpec);
+		}
+	}
+}
+
+void UBase_AbilitySystemComponent::AbilityInputTagHeld(FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid()) return;
+
+	for (auto& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(AbilitySpec);
+			if (!AbilitySpec.IsActive())
+			{
+				TryActivateAbility(AbilitySpec.Handle);
+			}
+		}
+	}
+}
+
+void UBase_AbilitySystemComponent::AbilityInputTagReleased(FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid()) return;
+
+	for (auto& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputReleased(AbilitySpec);
+		}
 	}
 }
 

@@ -46,7 +46,7 @@ void URPGInputComponent::BindAbilityAction(const URPGInputConfig* InputConfig, U
 			}
 			if (ReleasedFunc)
 			{
-				BindAction(Action.InputAction, ETriggerEvent::Completed, UserObject, HeldFunc, Action.InputTag);
+				BindAction(Action.InputAction, ETriggerEvent::Completed, UserObject, ReleasedFunc, Action.InputTag);
 			}
 			if (HeldFunc)
 			{

@@ -64,5 +64,6 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius = 50.f;
 
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
 };

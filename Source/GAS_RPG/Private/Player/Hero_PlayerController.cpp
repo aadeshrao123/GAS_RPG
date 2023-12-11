@@ -6,6 +6,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AutomationTestExcludelist.h"
 #include "EnhancedInputSubsystems.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "RPG_GameplayTags.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
@@ -78,8 +80,40 @@ void AHero_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	if (GetASC() == nullptr) return;
-	GetASC()->AbilityInputTagReleased(InputTag);
+	if (!InputTag.MatchesTagExact(FRPG_GameplayTags::Get().InputTag_LMB))
+	{
+		if (GetASC() == nullptr)
+		{
+			GetASC()->AbilityInputTagReleased(InputTag);
+		}
+		return;
+	}
+	if (bTargeting)
+	{
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+	}
+	else
+	{
+		APawn* ControlledPawn = GetPawn();
+		if (FollowTime <= ShortPress && ControlledPawn)
+		{
+			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
+			{
+				Spline->ClearSplinePoints();
+				for (FVector PointLocation : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(), PointLocation, 5.f, 12, FColor::Red, false, 5.f);
+				}
+				bAutoRunning = true;
+			}
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+	}
 }
 
 void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
@@ -94,7 +128,10 @@ void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	}
 	if (bTargeting)
 	{
+		if (GetASC())
+		{
 			GetASC()->AbilityInputTagHeld(InputTag);
+		}
 	}
 	else
 	{
@@ -137,8 +174,8 @@ void AHero_PlayerController::SetupInputComponent()
 void AHero_PlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>(); // Getting our FVector 2D from our Input Action
-	const FRotator ControlRotation = GetControlRotation();// Storing our Control Rotation in local variable
-	const FRotator YawRotation (0.f, ControlRotaion.Yaw, 0.f); // For getting only Yaw value from our control rotation
+	const FRotator Rotation = GetControlRotation();// Storing our Control Rotation in local variable
+	const FRotator YawRotation (0.f, Rotation.Yaw, 0.f); // For getting only Yaw value from our control rotation
 
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y); // For Getting our Forward Direction
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X); // For Getting our Right Direction

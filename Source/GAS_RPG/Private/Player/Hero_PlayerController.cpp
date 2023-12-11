@@ -70,7 +70,6 @@ void AHero_PlayerController::BeginPlay()
 
 void AHero_PlayerController::CursorTrace()
 {
-	FHitResult HitResultUnderCursor;
 	GetHitResultUnderCursor(ECC_Visibility, false, HitResultUnderCursor);
 	if (!HitResultUnderCursor.bBlockingHit) return;
 
@@ -78,14 +77,10 @@ void AHero_PlayerController::CursorTrace()
 	LastActor = ThisActor;
 	ThisActor = Cast<IEnemyInterface>(HitResultUnderCursor.GetActor());
 
-	if (ThisActor && ThisActor != LastActor)
+	if (LastActor != ThisActor)
 	{
-		ThisActor->HighlightActor();
-	}
-
-	if (LastActor && ThisActor != LastActor)
-	{
-		LastActor->UnHighlightActor();
+		if (LastActor) LastActor->UnHighlightActor();
+		if (ThisActor) ThisActor->HighlightActor();
 	}
 }
 
@@ -102,22 +97,16 @@ void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(FRPG_GameplayTags::Get().InputTag_LMB))
 	{
-		if (GetASC() == nullptr)
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 	}
 	else
 	{
-		APawn* ControlledPawn = GetPawn();
+		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPress && ControlledPawn)
 		{
 			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
@@ -126,7 +115,6 @@ void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				for (FVector PointLocation : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), PointLocation, 5.f, 12, FColor::Red, false, 5.f);
 				}
 				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() -1];
 				bAutoRunning = true;
@@ -141,28 +129,19 @@ void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(FRPG_GameplayTags::Get().InputTag_LMB))
 	{
-		if (GetASC() == nullptr)
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 	}
 	else
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
 
 		FHitResult Hit;
-		if (GetHitResultUnderCursor(ECC_Visibility, false, Hit))
-		{
-			CachedDestination = Hit.ImpactPoint;
-		}
+		if (HitResultUnderCursor.bBlockingHit) CachedDestination = HitResultUnderCursor.ImpactPoint;
 		if (APawn* ControlledPawn = GetPawn())
 		{
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();

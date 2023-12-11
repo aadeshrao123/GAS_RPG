@@ -60,6 +60,7 @@ private:
 	float ShortPress = 0.5f;
 	bool bAutoRunning = false;
 	bool bTargeting = false;
+	FHitResult HitResultUnderCursor;
 
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius = 50.f;

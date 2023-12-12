@@ -13,9 +13,11 @@ void URPGProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UKismetSystemLibrary::PrintString(this, FString("ActivateAbility C++"), true, true, FLinearColor::Red, 3.f);
+}
 
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+void URPGProjectileSpell::SpawnProjectile()
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
@@ -31,9 +33,5 @@ void URPGProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 		// TODO Give the projectile a gameplay effect for causing Damage
 		
 		Projectile->FinishSpawning(SpawnTransform);
-
 	}
-
-
-	
 }

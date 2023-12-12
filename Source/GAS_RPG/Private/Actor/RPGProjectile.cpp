@@ -9,6 +9,8 @@
 ARPGProjectile::ARPGProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;
+	
 	Sphere = CreateDefaultSubobject<USphereComponent>("SphereCollision");
 	SetRootComponent(Sphere);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);

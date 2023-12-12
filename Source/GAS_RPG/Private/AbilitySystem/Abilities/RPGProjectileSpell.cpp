@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/RPGProjectileSpell.h"
 
+#include "Actor/RPGProjectile.h"
+#include "Character/HeroCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void URPGProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -12,4 +14,26 @@ void URPGProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	UKismetSystemLibrary::PrintString(this, FString("ActivateAbility C++"), true, true, FLinearColor::Red, 3.f);
+
+	const bool bIsServer = HasAuthority(&ActivationInfo);
+	if (!bIsServer) return;
+
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
+	if (CombatInterface)
+	{
+		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
+		FTransform SpawnTransform;
+		// Set Projectile Spawn Rotation
+		SpawnTransform.SetLocation(SocketLocation);
+
+		ARPGProjectile* Projectile = GetWorld()->SpawnActorDeferred<ARPGProjectile>(ProjectileClass, SpawnTransform, GetOwningActorFromActorInfo(), Cast<APawn>(GetOwningActorFromActorInfo()), ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
+		// TODO Give the projectile a gameplay effect for causing Damage
+		
+		Projectile->FinishSpawning(SpawnTransform);
+
+	}
+
+
+	
 }

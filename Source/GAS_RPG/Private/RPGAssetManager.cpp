@@ -3,6 +3,7 @@
 
 #include "RPGAssetManager.h"
 
+#include "AbilitySystemGlobals.h"
 #include "RPG_GameplayTags.h"
 
 URPGAssetManager& URPGAssetManager::Get()
@@ -17,4 +18,7 @@ void URPGAssetManager::StartInitialLoading()
 	Super::StartInitialLoading();
 
 	FRPG_GameplayTags::InitializeNativeGameplayTags();
+
+	//This is required to use Gameplay TargetData
+	UAbilitySystemGlobals::Get().InitGlobalData();
 }

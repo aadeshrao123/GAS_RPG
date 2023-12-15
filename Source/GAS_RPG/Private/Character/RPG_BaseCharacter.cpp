@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GAS_RPG/GAS_RPG.h"
 
 ARPG_BaseCharacter::ARPG_BaseCharacter()
 {
@@ -13,7 +14,9 @@ ARPG_BaseCharacter::ARPG_BaseCharacter()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
+
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), "HandWeaponSocket");
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);

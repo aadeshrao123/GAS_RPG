@@ -7,6 +7,7 @@
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GAS_RPG/GAS_RPG.h"
 #include "Kismet/GameplayStatics.h"
 
 ARPGProjectile::ARPGProjectile()
@@ -16,6 +17,7 @@ ARPGProjectile::ARPGProjectile()
 	
 	Sphere = CreateDefaultSubobject<USphereComponent>("SphereCollision");
 	SetRootComponent(Sphere);
+	Sphere->SetCollisionObjectType(ECC_Projectile);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Sphere->SetCollisionResponseToChannels(ECR_Ignore);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);

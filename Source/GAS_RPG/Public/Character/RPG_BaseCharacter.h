@@ -33,7 +33,7 @@ protected:
 	FName WeaponTipSocketName;
 
 	virtual FVector GetCombatSocketLocation() override;
-
+	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 

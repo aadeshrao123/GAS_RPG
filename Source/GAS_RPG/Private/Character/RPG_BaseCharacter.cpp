@@ -5,10 +5,15 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 
 ARPG_BaseCharacter::ARPG_BaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), "HandWeaponSocket");
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);

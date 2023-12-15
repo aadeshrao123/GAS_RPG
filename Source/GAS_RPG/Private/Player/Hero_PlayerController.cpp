@@ -100,11 +100,9 @@ void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
-	if (bTargeting)
-	{
-		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
-	}
-	else
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+
+	if (!bTargeting && !bShiftPressed)
 	{
 		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPress && ControlledPawn)
@@ -123,6 +121,7 @@ void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		FollowTime = 0.f;
 		bTargeting = false;
 	}
+
 }
 
 void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
@@ -132,7 +131,7 @@ void AHero_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
-	if (bTargeting)
+	if (bTargeting || bShiftPressed)
 	{
 		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 	}
@@ -165,8 +164,10 @@ void AHero_PlayerController::SetupInputComponent()
 
 	URPGInputComponent* RPGInputComponent = CastChecked<URPGInputComponent>(InputComponent); // casting and  to get our Enhanced Input Component Pointer 
 	RPGInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHero_PlayerController::Move);
+	RPGInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AHero_PlayerController::ShiftPressed);
+	RPGInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AHero_PlayerController::ShiftReleased);
+	
 	// Binding our IA_Move Action to our Move Function. So When we press any move key it will call Move Function and Our Character will move accordingly
-
 	RPGInputComponent->BindAbilityAction(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 

@@ -50,6 +50,5 @@ void AEnemyCharacter::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-
-
+	InitializeDefaultAttributes();
 }

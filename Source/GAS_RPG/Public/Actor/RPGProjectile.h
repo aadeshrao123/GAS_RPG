@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "GameFramework/Actor.h"
 #include "RPGProjectile.generated.h"
 
@@ -22,6 +23,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 
 protected:
 	virtual void BeginPlay() override;
@@ -47,6 +50,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundBase> LoopingSound;
 
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAudioComponent> LoopingSoundComponent;
 	
 };

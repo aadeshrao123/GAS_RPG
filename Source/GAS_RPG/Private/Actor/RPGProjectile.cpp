@@ -3,6 +3,8 @@
 
 #include "Actor/RPGProjectile.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
@@ -56,8 +58,14 @@ void ARPGProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, A
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
 	LoopingSoundComponent->Stop();
+
 	if (HasAuthority())
 	{
+		UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor);
+		if (ASC)
+		{
+			ASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+		}
 		Destroy();
 	}
 	else

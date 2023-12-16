@@ -58,11 +58,6 @@ void UBase_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, ManaRegeneration, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
-
-
-
-	
-	
 }
 
 void UBase_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -110,9 +105,12 @@ void UBase_AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackDat
 	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 	{
 		Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
-		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		Props.TargetCharacter  = Cast<ACharacter>(Props.TargetController->GetCharacter());
 		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
+		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+		if (Props.TargetController)
+		{
+			Props.TargetCharacter  = Cast<ACharacter>(Props.TargetController->GetCharacter());
+		}
 	}
 }
 
@@ -125,13 +123,12 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
-		UE_LOG(LogTemp, Warning, TEXT("HealthValue: %f"), GetHealth() );
+		UE_LOG(LogTemp, Warning, TEXT("Changed Health Value of %s by: %f"),*Props.TargetAvatarActor->GetName(), GetHealth() );
 	}
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
-		UE_LOG(LogTemp, Warning, TEXT("ManaValue: %f"), GetMana());
-
+		UE_LOG(LogTemp, Warning, TEXT("Changed Mana Value of %s by: %f"),*Props.TargetAvatarActor->GetName(), GetMana());
 	}
 
 }

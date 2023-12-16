@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/RPGProjectileSpell.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Actor/RPGProjectile.h"
 #include "Character/HeroCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -33,8 +35,12 @@ void URPGProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocatio
 
 		ARPGProjectile* Projectile = GetWorld()->SpawnActorDeferred<ARPGProjectile>(ProjectileClass, SpawnTransform, GetOwningActorFromActorInfo(), Cast<APawn>(GetOwningActorFromActorInfo()), ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-		// TODO Give the projectile a gameplay effect for causing Damage
-		
+		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		if (SourceASC)
+		{
+			const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+			Projectile->DamageEffectSpecHandle = SpecHandle;
+		}
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 }

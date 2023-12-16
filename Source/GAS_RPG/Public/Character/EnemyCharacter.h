@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Character/RPG_BaseCharacter.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "EnemyCharacter.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
@@ -21,6 +23,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterClassDefault")
 	int32 Level = 1;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UWidgetComponent> HealthBar;
 	
 public:
 	
@@ -37,5 +42,11 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlighted = false;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 	
 };

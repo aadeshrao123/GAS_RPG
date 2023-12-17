@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
+#include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 #include "Components/WidgetComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
 #include "UI/Widget/HeroUserWidget.h"
@@ -78,4 +79,9 @@ void AEnemyCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	InitializeDefaultAttributes();
+}
+
+void AEnemyCharacter::InitializeDefaultAttributes() const
+{
+	URPGBlueprintFunctionLibrary::InitializeDefaultAttribute(this, CharacterClass, Level, AbilitySystemComponent);	
 }

@@ -8,7 +8,6 @@
 #include "RPG_GameplayTags.h"
 #include "Actor/RPGProjectile.h"
 #include "Character/HeroCharacter.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 void URPGProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                           const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -41,8 +40,10 @@ void URPGProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocatio
 		{
 			const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
 			const FRPG_GameplayTags GameplayTags = FRPG_GameplayTags::Get();
-			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, 60.f);
+
+			const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
 			
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, ScaledDamage);
 			Projectile->DamageEffectSpecHandle = SpecHandle;
 		}
 		Projectile->FinishSpawning(SpawnTransform);

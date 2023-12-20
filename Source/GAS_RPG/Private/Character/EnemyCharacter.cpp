@@ -3,18 +3,23 @@
 
 #include "Character/EnemyCharacter.h"
 
+#include "RPG_GameplayTags.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
 #include "UI/Widget/HeroUserWidget.h"
 
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
 
+	URPGBlueprintFunctionLibrary::GiveStartupAbilituies(this, AbilitySystemComponent);
+	
 	if (UHeroUserWidget* HeroWidget = Cast<UHeroUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		HeroWidget->SetWidgetController(this);
@@ -35,6 +40,8 @@ void AEnemyCharacter::BeginPlay()
 			OnHealthChanged.Broadcast(Data.NewValue);
 		});
 	}
+	AbilitySystemComponent->RegisterGameplayTagEvent(FRPG_GameplayTags::Get().HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AEnemyCharacter::HitReactChange);
+	
 	OnHealthChanged.Broadcast(BaseAttributeSet->GetHealth());
 	OnMaxHealthChanged.Broadcast(BaseAttributeSet->GetMaxHealth());
 }
@@ -84,4 +91,10 @@ void AEnemyCharacter::InitAbilityActorInfo()
 void AEnemyCharacter::InitializeDefaultAttributes() const
 {
 	URPGBlueprintFunctionLibrary::InitializeDefaultAttribute(this, CharacterClass, Level, AbilitySystemComponent);	
+}
+
+void AEnemyCharacter::HitReactChange(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 }

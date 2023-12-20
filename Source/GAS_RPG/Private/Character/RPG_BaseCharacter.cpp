@@ -28,6 +28,11 @@ UAbilitySystemComponent* ARPG_BaseCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UAnimMontage* ARPG_BaseCharacter::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void ARPG_BaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();

@@ -68,3 +68,21 @@ void URPGBlueprintFunctionLibrary::InitializeDefaultAttribute(const UObject* Wor
 		ASC->ApplyGameplayEffectSpecToSelf(*VitalAttributesEffectSpecHandle.Data.Get());
 	}
 }
+
+void URPGBlueprintFunctionLibrary::GiveStartupAbilituies(const UObject* WorldContextObject,
+	UAbilitySystemComponent* ASC)
+{
+	AHero_GameModeBase* GameMode = Cast<AHero_GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (GameMode)
+	{
+		UCharacterClassInfo* CharacterClassInfo = GameMode->CharacterClassInfo;
+
+		for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+			ASC->GiveAbility(AbilitySpec);
+		}
+
+	}
+
+}

@@ -23,6 +23,8 @@ protected:
 	virtual void InitAbilityActorInfo() override;
 	virtual void InitializeDefaultAttributes() const override;
 
+	void HitReactChange(const FGameplayTag CallbackTag, int32 NewCount);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterClassDefault")
 	int32 Level = 1;
 	
@@ -31,6 +33,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UWidgetComponent> HealthBar;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Combat");
+	bool bHitReacting;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Combat");
+	float BaseWalkSpeed = 250.f;
+
 	
 public:
 	

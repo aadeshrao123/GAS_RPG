@@ -46,6 +46,8 @@ public:
 
 	FGameplayTag Damage;
 
+	FGameplayTag HitReact;
+
 private:
 	static FRPG_GameplayTags GameplayTags;
 	

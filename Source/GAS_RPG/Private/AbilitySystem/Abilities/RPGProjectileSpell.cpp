@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "RPG_GameplayTags.h"
 #include "Actor/RPGProjectile.h"
 #include "Character/HeroCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -39,6 +40,9 @@ void URPGProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocatio
 		if (SourceASC)
 		{
 			const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+			const FRPG_GameplayTags GameplayTags = FRPG_GameplayTags::Get();
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, 60.f);
+			
 			Projectile->DamageEffectSpecHandle = SpecHandle;
 		}
 		Projectile->FinishSpawning(SpawnTransform);

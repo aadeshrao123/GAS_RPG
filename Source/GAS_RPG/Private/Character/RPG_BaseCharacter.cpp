@@ -51,6 +51,7 @@ void ARPG_BaseCharacter::MulticastHandelDeath_Implementation()
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Dissolve();
 }
 
 void ARPG_BaseCharacter::BeginPlay()
@@ -93,5 +94,21 @@ void ARPG_BaseCharacter::AddCharacterAbilities()
 
 	ASC->AddCharacterAbilities(StartupAbility);
 	
+}
+
+void ARPG_BaseCharacter::Dissolve()
+{
+	if (MeshDissolveMaterialInstance)
+	{
+		UMaterialInstanceDynamic* MeshDynamicMaterial = UMaterialInstanceDynamic::Create(MeshDissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, MeshDynamicMaterial);
+		StartDissolveMaterialTimelineMesh(MeshDynamicMaterial);
+	}
+	if (WeaponDissolveMaterialInstance)
+	{
+		UMaterialInstanceDynamic* WeaponDynamicMaterial = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+		Weapon->SetMaterial(0, WeaponDynamicMaterial);
+		StartDissolveMaterialTimelineWeapon(WeaponDynamicMaterial);
+	}
 }
 

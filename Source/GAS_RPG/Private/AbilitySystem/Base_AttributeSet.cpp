@@ -8,7 +8,9 @@
 #include "RPG_GameplayTags.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Player/Hero_PlayerController.h"
 
 UBase_AttributeSet::UBase_AttributeSet()
 {
@@ -108,10 +110,8 @@ void UBase_AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackDat
 		Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
 		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		if (Props.TargetController)
-		{
-			Props.TargetCharacter  = Cast<ACharacter>(Props.TargetController->GetCharacter());
-		}
+		Props.TargetCharacter  = Cast<ACharacter>(Props.TargetAvatarActor);
+
 	}
 }
 
@@ -156,6 +156,19 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				TagContainer.AddTag(FRPG_GameplayTags::Get().HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
+			SetFloatingText(Props, LocalIncomingDamage);
+		}
+	}
+}
+
+void UBase_AttributeSet::SetFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	if (Props.SourceCharacter != Props.TargetCharacter)
+	{
+		AHero_PlayerController* PC = Cast<AHero_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+		if (PC)
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
 		}
 	}
 }

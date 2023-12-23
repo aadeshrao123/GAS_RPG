@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "Hero_PlayerController.generated.h"
 
+class UDamageTextComponent;
 class USplineComponent;
 class UBase_AbilitySystemComponent;
 struct FInputActionValue;
@@ -26,6 +27,9 @@ class GAS_RPG_API AHero_PlayerController : public APlayerController
 public:
 	AHero_PlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
+
+	UFUNCTION(Client, Reliable)
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
 
 protected:
 	virtual  void BeginPlay() override;
@@ -76,4 +80,7 @@ private:
 	TObjectPtr<USplineComponent> Spline;
 
 	void AutoRun();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };

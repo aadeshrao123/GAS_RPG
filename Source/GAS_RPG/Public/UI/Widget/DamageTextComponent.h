@@ -7,7 +7,7 @@
 #include "DamageTextComponent.generated.h"
 
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable)
 class GAS_RPG_API UDamageTextComponent : public UWidgetComponent
 {
 	GENERATED_BODY()

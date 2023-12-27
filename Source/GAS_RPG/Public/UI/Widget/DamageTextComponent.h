@@ -14,5 +14,5 @@ class GAS_RPG_API UDamageTextComponent : public UWidgetComponent
 public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetDamageText(float DamageAmount);
+	void SetDamageText(float DamageAmount, bool bBlockedHit, bool bCriticalHit);
 };

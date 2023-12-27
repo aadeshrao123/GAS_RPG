@@ -171,7 +171,7 @@ void UBase_AttributeSet::SetFloatingText(const FEffectProperties& Props, float D
 		AHero_PlayerController* PC = Cast<AHero_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 		if (PC)
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
 }

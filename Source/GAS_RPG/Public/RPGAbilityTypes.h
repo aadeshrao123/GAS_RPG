@@ -19,7 +19,20 @@ public:
 	
 	virtual UScriptStruct* GetScriptStruct() const
 	{
-		return FGameplayEffectContextHandle::StaticStruct();
+		return StaticStruct();
+	}
+
+	/** Creates a copy of this context, used to duplicate for later modifications */
+	virtual FRPGGameplayEffectContext* Duplicate() const
+	{
+		FRPGGameplayEffectContext* NewContext = new FRPGGameplayEffectContext();
+		*NewContext = *this;
+		if (GetHitResult())
+		{
+			// Does a deep copy of the hit result
+			NewContext->AddHitResult(*GetHitResult(), true);
+		}
+		return NewContext;
 	}
 
 	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess);
@@ -30,6 +43,14 @@ protected:
 
 	UPROPERTY()
 	bool bIsCriticalHit;
+};
 
-	
+template<>
+struct TStructOpsTypeTraits<FRPGGameplayEffectContext> : public TStructOpsTypeTraitsBase2<FRPGGameplayEffectContext>
+{
+	enum
+	{
+		WithNetSerializer = true,
+		WithCopy = true
+	};	
 };

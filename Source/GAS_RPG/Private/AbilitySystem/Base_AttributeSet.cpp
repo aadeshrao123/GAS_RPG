@@ -37,7 +37,7 @@ UBase_AttributeSet::UBase_AttributeSet()
 
 	/* Resistance Attributes */
 	TagsToAttribute.Add(GameplayTags.Attributes_Resistance_Fire, GetFireResistanceAttribute);
-	TagsToAttribute.Add(GameplayTags.Attributes_Resistance_Lightning, GetLightingResistanceAttribute);
+	TagsToAttribute.Add(GameplayTags.Attributes_Resistance_Lightning, GetLightningResistanceAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Resistance_Arcane, GetArcaneResistanceAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Resistance_Physical, GetPhysicalResistanceAttribute);
 
@@ -73,7 +73,7 @@ void UBase_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 
 	//Resistance Attributes
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, LightingResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBase_AttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
 
@@ -282,9 +282,9 @@ void UBase_AttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldF
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, FireResistance, OldFireResistance);
 }
 
-void UBase_AttributeSet::OnRep_LightingResistance(const FGameplayAttributeData& OldLightingResistance) const
+void UBase_AttributeSet::OnRep_LightningResistance(const FGameplayAttributeData& OldLightingResistance) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, LightingResistance, OldLightingResistance);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBase_AttributeSet, LightningResistance, OldLightingResistance);
 }
 
 void UBase_AttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const

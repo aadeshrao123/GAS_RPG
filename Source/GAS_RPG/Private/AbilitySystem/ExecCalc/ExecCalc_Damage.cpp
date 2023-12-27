@@ -4,6 +4,7 @@
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "RPGAbilityTypes.h"
 #include "RPG_GameplayTags.h"
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
@@ -75,6 +76,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	const bool bBlocked = FMath::RandRange(1, 100) < TargetBlockChance;
 
+	FGameplayEffectContextHandle EffectContextHandle = EffectSpec.GetContext();
+	URPGBlueprintFunctionLibrary::SetIsBlockedHit(EffectContextHandle, bBlocked);
+	
 	//If Block, Divide Damage by 2.f
 	Damage = bBlocked ? Damage / 2.f : Damage;
 
@@ -118,6 +122,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//Critical Hit Resistance reduces Critical Hit Chances by a certain percentage
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * EffectiveCriticalHitChanceCoefficient;
 	const bool bCriticalHit = FMath::RandRange(1, 100) < EffectiveCriticalHitChance;
+
+	URPGBlueprintFunctionLibrary::SetIsCriticalHit(EffectContextHandle, bCriticalHit);
 
 	//Double the Damage plus a bonus if a Critical Hit
 	Damage = bCriticalHit ? Damage * 2.f + SourceCriticalHitDamage : Damage;

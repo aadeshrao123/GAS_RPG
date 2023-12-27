@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "RPG_GameplayTags.h"
+#include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -156,12 +157,14 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				TagContainer.AddTag(FRPG_GameplayTags::Get().HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-			SetFloatingText(Props, LocalIncomingDamage);
+			const bool bBlock = URPGBlueprintFunctionLibrary::IsBlockedHit(Props.EffectContextHandel);
+			const bool bCriticalHit = URPGBlueprintFunctionLibrary::IsCriticalHit(Props.EffectContextHandel);
+			SetFloatingText(Props, LocalIncomingDamage, bBlock, bCriticalHit);
 		}
 	}
 }
 
-void UBase_AttributeSet::SetFloatingText(const FEffectProperties& Props, float Damage) const
+void UBase_AttributeSet::SetFloatingText(const FEffectProperties& Props, float Damage,  bool bBlockedHit, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{

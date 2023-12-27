@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 
+#include "RPGAbilityTypes.h"
 #include "Game/Hero_GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/Hero_PlayerState.h"
@@ -85,4 +86,40 @@ UCharacterClassInfo* URPGBlueprintFunctionLibrary::GetCharacterClassInfo(const U
 		return GameMode->CharacterClassInfo;
 	}
 	return nullptr;
+}
+
+bool URPGBlueprintFunctionLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FRPGGameplayEffectContext* RPGEffectContext = static_cast<const FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return RPGEffectContext->IsBlockedHit();
+	}
+	return false;
+}
+
+bool URPGBlueprintFunctionLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FRPGGameplayEffectContext* RPGEffectContext = static_cast<const FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return RPGEffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+void URPGBlueprintFunctionLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bIsInBlockingHit)
+{
+	if (FRPGGameplayEffectContext* RPGEffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		RPGEffectContext->SetIsBlockedHit(bIsInBlockingHit);
+	}
+}
+
+void URPGBlueprintFunctionLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bIsInCriticalHit)
+{
+	if (FRPGGameplayEffectContext* RPGEffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		RPGEffectContext->SetIsCriticalHit(bIsInCriticalHit);
+	}
 }

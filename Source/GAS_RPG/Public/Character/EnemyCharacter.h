@@ -9,6 +9,8 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EnemyCharacter.generated.h"
 
+class UBehaviorTree;
+class ARPGAIController;
 class UWidgetComponent;
 /**
  * 
@@ -22,6 +24,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
 	virtual void InitializeDefaultAttributes() const override;
+	virtual void PossessedBy(AController* NewController) override;
 
 	void HitReactChange(const FGameplayTag CallbackTag, int32 NewCount);
 
@@ -43,6 +46,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat");
 	float LifeSpan = 5.f;
 
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<ARPGAIController> RPGAIController;
 	
 public:
 	

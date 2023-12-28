@@ -7,6 +7,9 @@
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
+#include "AI/RPGAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
@@ -102,6 +105,18 @@ void AEnemyCharacter::InitAbilityActorInfo()
 void AEnemyCharacter::InitializeDefaultAttributes() const
 {
 	URPGBlueprintFunctionLibrary::InitializeDefaultAttribute(this, CharacterClass, Level, AbilitySystemComponent);	
+}
+
+void AEnemyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (!HasAuthority()) return;
+	
+	RPGAIController = Cast<ARPGAIController>(NewController);
+
+	RPGAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	RPGAIController->RunBehaviorTree(BehaviorTree);
+	
 }
 
 void AEnemyCharacter::HitReactChange(const FGameplayTag CallbackTag, int32 NewCount)

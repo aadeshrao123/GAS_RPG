@@ -128,7 +128,7 @@ void AHero_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				{
 					Spline->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
 				}
-				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() -1];
+ 				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() -1];
 				bAutoRunning = true;
 			}
 		}

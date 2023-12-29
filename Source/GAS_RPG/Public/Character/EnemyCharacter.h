@@ -51,7 +51,10 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<ARPGAIController> RPGAIController;
-	
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
+
 public:
 	
 	AEnemyCharacter();
@@ -64,6 +67,8 @@ public:
 	//Combat Interface
 	virtual int32 GetPlayerLevel() override;
 	virtual void Die() override;
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	virtual AActor* GetCombatTarget_Implementation() override;
 	//Combat Interface
 	
 	UPROPERTY(BlueprintReadOnly)

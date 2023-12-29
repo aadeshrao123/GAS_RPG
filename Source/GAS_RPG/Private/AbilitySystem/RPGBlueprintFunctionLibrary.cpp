@@ -67,13 +67,24 @@ void URPGBlueprintFunctionLibrary::InitializeDefaultAttribute(const UObject* Wor
 }
 
 void URPGBlueprintFunctionLibrary::GiveStartupAbilituies(const UObject* WorldContextObject,
-	UAbilitySystemComponent* ASC)
+	UAbilitySystemComponent* ASC, ECharacterClass CharacterClass)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if(CharacterClassInfo == nullptr) return; 
 	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		ASC->GiveAbility(AbilitySpec);
+	}
+	const FCharacterClassDefaultInfo DefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	for (TSubclassOf<UGameplayAbility> AbilityClass : DefaultInfo.StartupAbilities)
+	{
+		if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor()))
+		{
+			const int PlayerLevel = CombatInterface->GetPlayerLevel();
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, PlayerLevel);
+			ASC->GiveAbility(AbilitySpec);
+		}
 	}
 
 }

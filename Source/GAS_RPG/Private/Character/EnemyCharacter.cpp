@@ -22,7 +22,7 @@ void AEnemyCharacter::BeginPlay()
 	InitAbilityActorInfo();
 	if (HasAuthority())
 	{
-		URPGBlueprintFunctionLibrary::GiveStartupAbilituies(this, AbilitySystemComponent);
+		URPGBlueprintFunctionLibrary::GiveStartupAbilituies(this, AbilitySystemComponent, CharacterClass);
 	}
 	
 	if (UHeroUserWidget* HeroWidget = Cast<UHeroUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -96,6 +96,16 @@ void AEnemyCharacter::Die()
 {
 	SetLifeSpan(LifeSpan);
 	Super::Die();
+}
+
+void AEnemyCharacter::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AEnemyCharacter::GetCombatTarget_Implementation()
+{
+	return CombatTarget;
 }
 
 void AEnemyCharacter::InitAbilityActorInfo()

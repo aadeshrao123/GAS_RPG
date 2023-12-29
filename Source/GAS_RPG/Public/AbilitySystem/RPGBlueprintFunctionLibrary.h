@@ -30,7 +30,7 @@ public:
 	static void InitializeDefaultAttribute(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC);
 
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary | CharacterClassDefault")
-	static void GiveStartupAbilituies(const UObject* WorldContextObject, UAbilitySystemComponent* ASC);
+	static void GiveStartupAbilituies(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass);
 
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary | CharacterClassDefault")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);

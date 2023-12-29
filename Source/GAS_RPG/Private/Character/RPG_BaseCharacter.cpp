@@ -60,7 +60,7 @@ void ARPG_BaseCharacter::BeginPlay()
 	
 }
 
-FVector ARPG_BaseCharacter::GetCombatSocketLocation()
+FVector ARPG_BaseCharacter::GetCombatSocketLocation_Implementation()
 {
 	check(Weapon)
 	return Weapon->GetSocketLocation(WeaponTipSocketName);

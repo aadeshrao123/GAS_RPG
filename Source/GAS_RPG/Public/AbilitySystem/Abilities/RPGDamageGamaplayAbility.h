@@ -13,6 +13,11 @@ UCLASS()
 class GAS_RPG_API URPGDamageGamaplayAbility : public URPGGameplayAbility
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void CauseDamage(AActor* TargetActor);
+	
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

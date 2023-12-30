@@ -22,9 +22,21 @@ public:
 	ARPG_BaseCharacter();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const {return AttributeSet; }
+
+	//Combat Interface
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	virtual void Die() override;
+	virtual FVector GetCombatSocketLocation_Implementation() override;
+	virtual bool IsDead_Implementation() const override;
+	virtual AActor* GetAvatar_Implementation() override;
+	virtual TArray<FTaggedMontage> GetAttackMontage_Implementation() override;
+	//Combat Interface
 	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandelDeath();
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TArray<FTaggedMontage> AttackMontages;
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,14 +48,6 @@ protected:
 	FName WeaponTipSocketName;
 
 	bool bDead = false;
-
-	//Combat Interface
-	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-	virtual void Die() override;
-	virtual FVector GetCombatSocketLocation_Implementation() override;
-	virtual bool IsDead_Implementation() const override;
-	virtual AActor* GetAvatar_Implementation() override;
-	//Combat Interface
 	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

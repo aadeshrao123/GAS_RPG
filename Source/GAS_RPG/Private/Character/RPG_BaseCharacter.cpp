@@ -77,6 +77,11 @@ AActor* ARPG_BaseCharacter::GetAvatar_Implementation()
 	return this;
 }
 
+TArray<FTaggedMontage> ARPG_BaseCharacter::GetAttackMontage_Implementation()
+{
+	return AttackMontages;
+}
+
 void ARPG_BaseCharacter::InitAbilityActorInfo()
 {
 }

@@ -52,6 +52,7 @@ void ARPG_BaseCharacter::MulticastHandelDeath_Implementation()
 	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
+	bDead = true;
 }
 
 void ARPG_BaseCharacter::BeginPlay()
@@ -64,6 +65,16 @@ FVector ARPG_BaseCharacter::GetCombatSocketLocation_Implementation()
 {
 	check(Weapon)
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
+bool ARPG_BaseCharacter::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+AActor* ARPG_BaseCharacter::GetAvatar_Implementation()
+{
+	return this;
 }
 
 void ARPG_BaseCharacter::InitAbilityActorInfo()

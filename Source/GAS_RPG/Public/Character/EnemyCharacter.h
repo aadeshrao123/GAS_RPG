@@ -40,7 +40,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Combat");
 	bool bHitReacting;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Combat");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat");
 	float BaseWalkSpeed = 250.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat");

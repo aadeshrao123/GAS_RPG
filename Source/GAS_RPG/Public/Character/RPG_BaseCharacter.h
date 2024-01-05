@@ -8,6 +8,7 @@
 #include "Interaction/CombatInterface.h"
 #include "RPG_BaseCharacter.generated.h"
 
+class UNiagaraSystem;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
@@ -30,6 +31,7 @@ public:
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual TArray<FTaggedMontage> GetAttackMontage_Implementation() override;
+	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	//Combat Interface
 	
 	UFUNCTION(NetMulticast, Reliable)
@@ -95,6 +97,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly ,Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly ,Category = "Combat")
+	TObjectPtr<UNiagaraSystem> BloodEffect;
 	
 private:
 

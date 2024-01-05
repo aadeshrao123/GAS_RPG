@@ -96,6 +96,11 @@ TArray<FTaggedMontage> ARPG_BaseCharacter::GetAttackMontage_Implementation()
 	return AttackMontages;
 }
 
+UNiagaraSystem* ARPG_BaseCharacter::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
+}
+
 void ARPG_BaseCharacter::InitAbilityActorInfo()
 {
 }

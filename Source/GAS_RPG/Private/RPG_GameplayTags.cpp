@@ -58,10 +58,16 @@ void FRPG_GameplayTags::InitializeNativeGameplayTags()
 
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Attack"), FString("Attack Abilities"));
 	
-	//Montages
-	GameplayTags.Montage_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.Weapon"), FString("Attack Weapon"));
-	GameplayTags.Montage_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.RightHand"), FString("Attack RightHand"));
-	GameplayTags.Montage_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.LeftHand"), FString("Attack LeftHand"));
+	//Sockets
+	GameplayTags.Sockets_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.Weapon"), FString("Socket Weapon"));
+	GameplayTags.Sockets_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.RightHand"), FString("Socket RightHand"));
+	GameplayTags.Sockets_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.LeftHand"), FString("Socket LeftHand"));
+
+	//Attack Montages
+	GameplayTags.Montage_Attack_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.1"), FString("Montage Attack 1"));
+	GameplayTags.Montage_Attack_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.2"), FString("Montage Attack 2"));
+	GameplayTags.Montage_Attack_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.3"), FString("Montage Attack 3"));
+	GameplayTags.Montage_Attack_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.4"), FString("Montage Attack 4"));
 
 	
 	//Effects

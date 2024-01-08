@@ -9,6 +9,7 @@
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
+#include "Kismet/GameplayStatics.h"
 
 ARPG_BaseCharacter::ARPG_BaseCharacter()
 {
@@ -43,6 +44,8 @@ void ARPG_BaseCharacter::Die()
 
 void ARPG_BaseCharacter::MulticastHandelDeath_Implementation()
 {
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), GetActorRotation());
+	
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);

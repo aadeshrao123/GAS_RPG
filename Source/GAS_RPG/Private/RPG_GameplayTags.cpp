@@ -62,6 +62,7 @@ void FRPG_GameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Sockets_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.Weapon"), FString("Socket Weapon"));
 	GameplayTags.Sockets_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.RightHand"), FString("Socket RightHand"));
 	GameplayTags.Sockets_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.LeftHand"), FString("Socket LeftHand"));
+	GameplayTags.Sockets_Attack_Tail = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.Tail"), FString("Socket Tail"));
 
 	//Attack Montages
 	GameplayTags.Montage_Attack_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Montage.Attack.1"), FString("Montage Attack 1"));

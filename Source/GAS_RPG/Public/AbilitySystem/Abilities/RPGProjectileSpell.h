@@ -8,6 +8,7 @@
 #include "RPGProjectileSpell.generated.h"
 
 class ARPGProjectile;
+struct FGameplayTag;
 /**
  * 
  */
@@ -23,6 +24,6 @@ protected:
 	TSubclassOf<ARPGProjectile> ProjectileClass;
 	
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	void SpawnProjectile(const FVector& ProjectileTargetLocation);
+	void SpawnProjectile(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag);
 
 };

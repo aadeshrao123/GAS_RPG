@@ -59,6 +59,7 @@ public:
 	FGameplayTag Damage_Physical;
 
 	FGameplayTag Abilities_Attack;
+	FGameplayTag Abilities_Summon;
 
 	//Sockets
 	FGameplayTag Sockets_Attack_Weapon;

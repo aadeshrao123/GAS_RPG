@@ -57,6 +57,7 @@ void FRPG_GameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Physical, GameplayTags.Attributes_Resistance_Physical);
 
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Attack"), FString("Attack Abilities"));
+	GameplayTags.Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Abilities.Summon"), FString("Summon Abilities"));
 	
 	//Sockets
 	GameplayTags.Sockets_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Sockets.Attack.Weapon"), FString("Socket Weapon"));

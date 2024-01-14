@@ -121,6 +121,11 @@ FTaggedMontage ARPG_BaseCharacter::GetTaggedMontageByTag_Implementation(const FG
 	return FTaggedMontage();
 }
 
+int32 ARPG_BaseCharacter::GetMinionCount_Implementation()
+{
+	return MinionCount;
+}
+
 void ARPG_BaseCharacter::InitAbilityActorInfo()
 {
 }

@@ -126,6 +126,11 @@ int32 ARPG_BaseCharacter::GetMinionCount_Implementation()
 	return MinionCount;
 }
 
+void ARPG_BaseCharacter::IncrementtMinionCount_Implementation(int32 Amount)
+{
+	MinionCount += Amount;
+}
+
 void ARPG_BaseCharacter::InitAbilityActorInfo()
 {
 }

@@ -3,7 +3,7 @@
 
 #include "AbilitySystem/Data/AbilityInfo.h"
 
-FHeroAbilityInfo UAbilityInfo::FindAbilityInfoForTag(const FGameplayTag& AbilityTag, bool bLogNotFound)
+FHeroAbilityInfo UAbilityInfo::FindAbilityInfoForTag(const FGameplayTag& AbilityTag, bool bLogNotFound) const
 {
 	for (const FHeroAbilityInfo& Info : AbilityInformation)
 	{

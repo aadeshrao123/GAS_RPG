@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -74,4 +75,13 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 void UOverlayWidgetController::OnInitializeStartupAbilities(UBase_AbilitySystemComponent* Base_AbilitySystemComponent)
 {
 	if (!Base_AbilitySystemComponent->bStartupAbilitiesGiven) return;
+
+	FForEachAbility BroadcastDelegate;
+	BroadcastDelegate.BindLambda([this, Base_AbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
+	{
+		FHeroAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(Base_AbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
+		Info.InputTag = Base_AbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+		AbilityInfoDelegate.Broadcast(Info);
+	});
+	Base_AbilitySystemComponent->ForEachAbility(BroadcastDelegate);
 }

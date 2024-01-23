@@ -6,6 +6,7 @@
 #include "HeroWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
+class UBase_AbilitySystemComponent;
 class UAbilityInfo;
 class UHeroUserWidget;
 
@@ -67,6 +68,8 @@ protected:
 
 	template <typename T>
 	T* GetDataTableByTag(UDataTable* DataTable, const FGameplayTag& Tag);
+
+	void OnInitializeStartupAbilities(UBase_AbilitySystemComponent* Base_AbilitySystemComponent);
 };
 
 template <typename T>

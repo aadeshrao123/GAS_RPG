@@ -42,9 +42,20 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 			OnMaxManaChanged.Broadcast(Data.NewValue);
 		}
 		);
-	
-	Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-	[this](const FGameplayTagContainer& AssetTag)
+
+	if (UBase_AbilitySystemComponent* BaseASC = Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent))
+	{
+		if (BaseASC->bStartupAbilitiesGiven)
+		{
+			OnInitializeStartupAbilities(BaseASC);
+		}
+		else
+		{
+			BaseASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
+		
+		BaseASC->EffectAssetTags.AddLambda(
+[this](const FGameplayTagContainer& AssetTag)
 		{
 			for (FGameplayTag Tag : AssetTag)
 			{
@@ -57,4 +68,10 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 			}
 		}
 		);
+	}
+}
+
+void UOverlayWidgetController::OnInitializeStartupAbilities(UBase_AbilitySystemComponent* Base_AbilitySystemComponent)
+{
+	if (!Base_AbilitySystemComponent->bStartupAbilitiesGiven) return;
 }

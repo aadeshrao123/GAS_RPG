@@ -25,6 +25,8 @@ void UBase_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 			GiveAbility(AbilitySpec);
 		}
 	}
+	bStartupAbilitiesGiven = true;
+	AbilitiesGivenDelegate.Broadcast(this);
 }
 
 void UBase_AbilitySystemComponent::AbilityInputTagHeld(FGameplayTag& InputTag)

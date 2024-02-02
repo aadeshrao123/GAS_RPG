@@ -24,14 +24,46 @@ UAbilitySystemComponent* AHero_PlayerState::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-void AHero_PlayerState::OnRep_Level(int32 OldLevel)
-{
-	
-}
 
 void AHero_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AHero_PlayerState, Level);
+	DOREPLIFETIME(AHero_PlayerState, XP);
+	
+}
+
+void AHero_PlayerState::OnRep_Level(int32 OldLevel)
+{
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void AHero_PlayerState::OnRep_XP(int32 OldXP)
+{
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void AHero_PlayerState::SetXP(int32 XPToSet)
+{
+	XP = XPToSet;
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void AHero_PlayerState::SetLevel(int32 LevelToSet)
+{
+	Level +=LevelToSet;
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void AHero_PlayerState::AddToLevel(int32 LevelToAdd)
+{
+	Level +=LevelToAdd;
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void AHero_PlayerState::AddToXP(int32 XPToAdd)
+{
+	XP += XPToAdd;
+	OnXPChangedDelegate.Broadcast(XP);
 }

@@ -8,6 +8,8 @@
 #include "Interaction/CombatInterface.h"
 #include "Hero_PlayerState.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FONPlayerStatChanged, int32 /*StatChanged*/);
+
 class UAttributeSet;
 class UAbilitySystemComponent;
 /**
@@ -28,6 +30,18 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	FORCEINLINE int32 GetPlayerLevel() const {return Level; }
+	FORCEINLINE int32 GetPlayerXP() const {return XP; }
+	
+	void SetXP(int32 XPToSet);
+	void SetLevel(int32 LevelToSet);
+
+	void AddToLevel(int32 LevelToAdd);
+	void AddToXP(int32 XPToAdd);
+
+	FONPlayerStatChanged OnXPChangedDelegate;
+	FONPlayerStatChanged OnLevelChangedDelegate;
+
+
 
 protected:
 	UPROPERTY()
@@ -40,7 +54,12 @@ private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Level)
 	int32 Level = 1;
 
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_XP)
+	int32 XP = 0;
+
 	UFUNCTION()
 	void OnRep_Level(int32 OldLevel);
-	
+
+	UFUNCTION()
+	void OnRep_XP(int32 OldXP);
 };

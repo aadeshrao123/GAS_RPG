@@ -71,7 +71,7 @@ void AHeroCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
-int32 AHeroCharacter::GetPlayerLevel()
+int32 AHeroCharacter::GetPlayerLevel_Implementation()
 {
 	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
 	check(HeroPlayerState);
@@ -85,4 +85,9 @@ void AHeroCharacter::AddToXP_Implementation(int32 InXP)
 	check(HeroPlayerState);
 	HeroPlayerState->AddToXP(InXP);
 
+}
+
+void AHeroCharacter::LevelUP_Implementation()
+{
+	IPlayerInterface::LevelUP_Implementation();
 }

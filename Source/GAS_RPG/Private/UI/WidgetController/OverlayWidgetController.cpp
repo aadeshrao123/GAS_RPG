@@ -6,6 +6,7 @@
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
+#include "Player/Hero_PlayerState.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -18,6 +19,10 @@ void UOverlayWidgetController::BroadcastInitialValues()
 
 void UOverlayWidgetController::BindCallbacksTODependencies()
 {
+	AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
+	HeroPlayerState->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
+
+
 	const UBase_AttributeSet* BaseAttributeSet = CastChecked<UBase_AttributeSet>(AttributeSet);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(BaseAttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
@@ -84,4 +89,29 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(UBase_AbilitySystemC
 		AbilityInfoDelegate.Broadcast(Info);
 	});
 	Base_AbilitySystemComponent->ForEachAbility(BroadcastDelegate);
+}
+
+void UOverlayWidgetController::OnXPChanged(int32 NewXp)
+{
+	const AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
+	const ULevelUpInfo* LevelUpInfo = HeroPlayerState->LevelUpInfo;
+
+	checkf(LevelUpInfo, TEXT("You haven't filled the levelupinfo in Player state. Go and fill it"));
+
+	const int32 Level = LevelUpInfo->FindLevelForXP(NewXp);
+	const int32 MaxLevel = LevelUpInfo->LevelUpInfo.Num();
+
+	if (Level <= MaxLevel && Level > 0)
+	{
+		const int32 CurrentLevelXPRequirements = LevelUpInfo->LevelUpInfo[Level].LevelUPRequirement;
+		const int32 PreviousLevelXPRequirements = LevelUpInfo->LevelUpInfo[Level - 1].LevelUPRequirement;
+
+		const int32 DeltaLevelRequirements = CurrentLevelXPRequirements - PreviousLevelXPRequirements;
+		const int32 XPForThisLevel =  NewXp - PreviousLevelXPRequirements;
+
+		const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaLevelRequirements);
+		OnXPPercentageChangedDelegate.Broadcast(XPBarPercent);
+
+	}
+	
 }

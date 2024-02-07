@@ -34,5 +34,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "LevelUP")
 	TArray<FRPGLevelUpInfo> LevelUpInfo;
 
-	int32 FindLevelForXP(int32 XP);
+	int32 FindLevelForXP(int32 XP) const;
 };

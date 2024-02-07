@@ -78,3 +78,11 @@ int32 AHeroCharacter::GetPlayerLevel()
 	return HeroPlayerState->GetPlayerLevel();
 
 }
+
+void AHeroCharacter::AddToXP_Implementation(int32 InXP)
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	HeroPlayerState->AddToXP(InXP);
+
+}

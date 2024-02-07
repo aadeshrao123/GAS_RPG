@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/RPG_BaseCharacter.h"
 #include "AbilitySystemInterface.h"
+#include "Interaction/PlayerInterface.h"
 #include "HeroCharacter.generated.h"
 
 class USpringArmComponent;
@@ -16,7 +17,7 @@ class UAbilitySystemComponent;
  * 
  */
 UCLASS()
-class GAS_RPG_API AHeroCharacter : public ARPG_BaseCharacter
+class GAS_RPG_API AHeroCharacter : public ARPG_BaseCharacter, public IPlayerInterface
 {
 	GENERATED_BODY()
 
@@ -29,6 +30,9 @@ public:
 	virtual int32 GetPlayerLevel() override;
 	//Combat Interface
 
+	//Player Interface
+	virtual void AddToXP_Implementation(int32 InXP) override;
+	//Player Interface
 
 
 protected:

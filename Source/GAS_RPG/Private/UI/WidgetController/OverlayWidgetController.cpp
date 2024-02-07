@@ -21,7 +21,13 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 {
 	AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
 	HeroPlayerState->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
-
+	HeroPlayerState->OnLevelChangedDelegate.AddLambda
+	(
+		[this](int32 NewValue)
+		{
+			OnPlayerLevelChangedDelegate.Broadcast(NewValue);
+		}
+	);
 
 	const UBase_AttributeSet* BaseAttributeSet = CastChecked<UBase_AttributeSet>(AttributeSet);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(BaseAttributeSet->GetHealthAttribute()).AddLambda(

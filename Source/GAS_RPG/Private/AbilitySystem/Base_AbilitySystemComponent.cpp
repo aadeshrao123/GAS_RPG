@@ -29,6 +29,16 @@ void UBase_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 	AbilitiesGivenDelegate.Broadcast(this);
 }
 
+void UBase_AbilitySystemComponent::AddCharacterPassiveAbilities(
+	const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbility)
+{
+	for (TSubclassOf<UGameplayAbility> Ability : StartupPassiveAbility)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability, 1);
+		GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+}
+
 void UBase_AbilitySystemComponent::AbilityInputTagHeld(FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;

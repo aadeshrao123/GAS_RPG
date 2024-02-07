@@ -163,6 +163,7 @@ void ARPG_BaseCharacter::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 
 	ASC->AddCharacterAbilities(StartupAbility);
+	ASC->AddCharacterPassiveAbilities(StartupPassiveAbility);
 	
 }
 

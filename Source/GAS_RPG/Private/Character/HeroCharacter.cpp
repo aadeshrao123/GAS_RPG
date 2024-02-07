@@ -91,3 +91,48 @@ void AHeroCharacter::LevelUP_Implementation()
 {
 	IPlayerInterface::LevelUP_Implementation();
 }
+
+int32 AHeroCharacter::GetXP_Implementation()
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->GetPlayerXP();
+}
+
+int32 AHeroCharacter::FindLevelForXP_Implementation(int32 InXP)
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->LevelUpInfo->FindLevelForXP(InXP);
+}
+
+int32 AHeroCharacter::GetAttributePointsReward_Implementation(int32 Level) const
+{
+	const AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->LevelUpInfo->LevelUpInfo[Level].AttributePointRewards;
+}
+
+int32 AHeroCharacter::GetSpellPointsReward_Implementation(int32 Level) const
+{
+	const AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->LevelUpInfo->LevelUpInfo[Level].SpellPointReward;
+}
+
+void AHeroCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
+{
+	AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->AddToLevel(InPlayerLevel);
+}
+
+void AHeroCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
+{
+	//TODO: Add AttributePoints to PlayerState
+}
+
+void AHeroCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints)
+{
+	//TODO: Add SpellPoints to PlayerState
+}

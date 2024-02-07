@@ -8,6 +8,7 @@
 #include "Interaction/PlayerInterface.h"
 #include "HeroCharacter.generated.h"
 
+class UNiagaraComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UAttributeSet;
@@ -51,7 +52,13 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	TObjectPtr<UCameraComponent> Camera;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
 
 private:
 	virtual void InitAbilityActorInfo() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLevelUPParticles() const;
 };

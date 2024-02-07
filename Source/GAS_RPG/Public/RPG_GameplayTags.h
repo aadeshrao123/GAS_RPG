@@ -42,7 +42,7 @@ public:
 	FGameplayTag Attributes_Resistance_Physical;
 
 	//Meta AttributeTags
-	FGameplayTag Attribute_Meta_IncomingXP;
+	FGameplayTag Attributes_Meta_IncomingXP;
 	
 	
 	//InputTags

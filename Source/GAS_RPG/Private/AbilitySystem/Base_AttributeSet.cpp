@@ -166,6 +166,7 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				{
 					CombatInterface->Die();
 				}
+				SendXPEvent(Props);
 			}
 			else
 			{
@@ -187,6 +188,21 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	}
 }
 
+void UBase_AttributeSet::SendXPEvent(const FEffectProperties& Props) const
+{
+	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetCharacter))
+	{
+		const int32 TargetLevel = CombatInterface->GetPlayerLevel();
+		const ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
+		const int32 XPReward = URPGBlueprintFunctionLibrary::GetXPRewardForClassandLevel(Props.TargetCharacter, TargetClass, TargetLevel);
+		
+		FGameplayEventData EventDataPayload;
+		EventDataPayload.EventTag = FRPG_GameplayTags::Get().Attributes_Meta_IncomingXP;
+		EventDataPayload.EventMagnitude = XPReward;
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Props.SourceCharacter, FRPG_GameplayTags::Get().Attributes_Meta_IncomingXP, EventDataPayload);
+	}
+}
+
 void UBase_AttributeSet::SetFloatingText(const FEffectProperties& Props, float Damage,  bool bBlockedHit, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
@@ -203,6 +219,7 @@ void UBase_AttributeSet::SetFloatingText(const FEffectProperties& Props, float D
 		}
 	}
 }
+
 
 //Vital Attributes
 void UBase_AttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

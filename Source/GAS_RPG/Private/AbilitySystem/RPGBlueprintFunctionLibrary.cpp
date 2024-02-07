@@ -86,7 +86,18 @@ void URPGBlueprintFunctionLibrary::GiveStartupAbilituies(const UObject* WorldCon
 			ASC->GiveAbility(AbilitySpec);
 		}
 	}
+}
 
+
+int32 URPGBlueprintFunctionLibrary::GetXPRewardForClassandLevel(const UObject* WorldContextObject,
+	ECharacterClass CharacterClass, int32 CharacterLevel)
+{
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if(CharacterClassInfo == nullptr) return 0;
+
+	const FCharacterClassDefaultInfo Info = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	const float XPReward = Info.XPRewardCurveTable.GetValueAtLevel(CharacterLevel);
+	return static_cast<int32>(XPReward);
 }
 
 UCharacterClassInfo* URPGBlueprintFunctionLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)

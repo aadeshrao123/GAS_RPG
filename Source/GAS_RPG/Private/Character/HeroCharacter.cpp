@@ -28,6 +28,8 @@ AHeroCharacter::AHeroCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	CharacterClass = ECharacterClass::Elementalist;
 }
 
 void AHeroCharacter::BeginPlay()

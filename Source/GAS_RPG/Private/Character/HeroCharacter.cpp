@@ -146,10 +146,14 @@ void AHeroCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 
 void AHeroCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
 {
-	//TODO: Add AttributePoints to PlayerState
+	AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->AddAttributePoints(InAttributePoints);
 }
 
 void AHeroCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints)
 {
-	//TODO: Add SpellPoints to PlayerState
+	AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->AddSpellPoints(InSpellPoints);
 }

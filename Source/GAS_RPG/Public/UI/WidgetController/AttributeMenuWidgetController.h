@@ -24,6 +24,12 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FSignatureAttributeInfoDelegate AttributeInfoDelegate;
 
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
+	FONPlayerStatsChanged OnAttributePointsChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
+	FONPlayerStatsChanged OnSpellPointsChanged;
+
 protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;

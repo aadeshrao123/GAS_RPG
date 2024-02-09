@@ -31,6 +31,8 @@ void AHero_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME(AHero_PlayerState, Level);
 	DOREPLIFETIME(AHero_PlayerState, XP);
+	DOREPLIFETIME(AHero_PlayerState, AttributePoints);
+	DOREPLIFETIME(AHero_PlayerState, SpellPoints);
 	
 }
 
@@ -44,6 +46,16 @@ void AHero_PlayerState::OnRep_XP(int32 OldXP)
 	OnXPChangedDelegate.Broadcast(XP);
 }
 
+void AHero_PlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
+{
+	OnXPChangedDelegate.Broadcast(AttributePoints);
+}
+
+void AHero_PlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
+{
+	OnXPChangedDelegate.Broadcast(SpellPoints);
+}
+
 void AHero_PlayerState::SetXP(int32 XPToSet)
 {
 	XP = XPToSet;
@@ -52,8 +64,20 @@ void AHero_PlayerState::SetXP(int32 XPToSet)
 
 void AHero_PlayerState::SetLevel(int32 LevelToSet)
 {
-	Level +=LevelToSet;
+	Level = LevelToSet;
 	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void AHero_PlayerState::SetAttributePoints(int32 AttributePointsToSet)
+{
+	AttributePoints = AttributePointsToSet;
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void AHero_PlayerState::SetSpellPoints(int32 SpellPointsToSet)
+{
+	SpellPoints = SpellPointsToSet;
+	OnSpellPointsDelegate.Broadcast(SpellPoints);
 }
 
 void AHero_PlayerState::AddToLevel(int32 LevelToAdd)
@@ -66,4 +90,16 @@ void AHero_PlayerState::AddToXP(int32 XPToAdd)
 {
 	XP += XPToAdd;
 	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void AHero_PlayerState::AddAttributePoints(int32 AttributePointsToSet)
+{
+	AttributePoints += AttributePointsToSet;
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void AHero_PlayerState::AddSpellPoints(int32 SpellPointsToSet)
+{
+	SpellPoints = SpellPointsToSet;
+	OnSpellPointsDelegate.Broadcast(SpellPoints);
 }

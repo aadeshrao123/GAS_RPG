@@ -7,6 +7,8 @@
 #include "UObject/Object.h"
 #include "HeroWidgetController.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FONPlayerStatsChanged, int32, NewValue);
+
 class UAttributeSet;
 class UAbilitySystemComponent;
 

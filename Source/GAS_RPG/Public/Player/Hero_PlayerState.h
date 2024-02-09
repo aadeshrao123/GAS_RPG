@@ -33,9 +33,16 @@ public:
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetPlayerLevel() const {return Level; }
+	
+	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetPlayerXP() const {return XP; }
+	
+	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetAttributePoints() const {return AttributePoints; }
+	
+	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetSpellPoints() const {return SpellPoints; }
 
 	void SetXP(int32 XPToSet);

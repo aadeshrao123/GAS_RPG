@@ -8,6 +8,7 @@
 
 class UAttributeInfo;
 struct FRPGAttributeInfo;
+struct FGameplayTag;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSignatureAttributeInfoDelegate, const FRPGAttributeInfo&, Info);
 
 /**
@@ -29,6 +30,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FONPlayerStatsChanged OnSpellPointsChanged;
+
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAttribute(const FGameplayTag& AttributeTag);
 
 protected:
 	UPROPERTY(EditDefaultsOnly)

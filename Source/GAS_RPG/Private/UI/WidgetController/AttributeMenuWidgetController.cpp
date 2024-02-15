@@ -3,7 +3,9 @@
 
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 
+#include "AssetTypeCategories.h"
 #include "RPG_GameplayTags.h"
+#include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "AbilitySystem/Data/AttributeInfo.h"
 #include "Player/Hero_PlayerState.h"
@@ -53,8 +55,14 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	OnSpellPointsChanged.Broadcast(HeroPlayerState->GetSpellPoints());	
 }
 
+void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	UBase_AbilitySystemComponent* HeroASC = CastChecked<UBase_AbilitySystemComponent>(AbilitySystemComponent);
+	HeroASC->UpgradeAttribute(AttributeTag);
+}
+
 void UAttributeMenuWidgetController::BroadcastInitialInfo(const FGameplayTag& AttributeTag,
-	const FGameplayAttribute& Attribute) const
+                                                          const FGameplayAttribute& Attribute) const
 {
 	FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
 	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);

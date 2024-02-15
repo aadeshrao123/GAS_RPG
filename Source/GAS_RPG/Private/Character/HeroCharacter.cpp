@@ -125,35 +125,49 @@ int32 AHeroCharacter::FindLevelForXP_Implementation(int32 InXP)
 
 int32 AHeroCharacter::GetAttributePointsReward_Implementation(int32 Level) const
 {
-	const AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->LevelUpInfo->LevelUpInfo[Level].AttributePointRewards;
+	const AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->LevelUpInfo->LevelUpInfo[Level].AttributePointRewards;
 }
 
 int32 AHeroCharacter::GetSpellPointsReward_Implementation(int32 Level) const
 {
-	const AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->LevelUpInfo->LevelUpInfo[Level].SpellPointReward;
+	const AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->LevelUpInfo->LevelUpInfo[Level].SpellPointReward;
 }
 
 void AHeroCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 {
-	AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddToLevel(InPlayerLevel);
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	HeroPlayerState->AddToLevel(InPlayerLevel);
 }
 
 void AHeroCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
 {
-	AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddAttributePoints(InAttributePoints);
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	HeroPlayerState->AddAttributePoints(InAttributePoints);
 }
 
 void AHeroCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints)
 {
-	AHero_PlayerState* AuraPlayerState = GetPlayerState<AHero_PlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddSpellPoints(InSpellPoints);
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	HeroPlayerState->AddSpellPoints(InSpellPoints);
+}
+
+int32 AHeroCharacter::GetAttributePointsPoints_Implementation() const
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->GetAttributePoints();
+}
+
+int32 AHeroCharacter::GetSpellPoints_Implementation() const
+{
+	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
+	check(HeroPlayerState);
+	return HeroPlayerState->GetSpellPoints();
 }

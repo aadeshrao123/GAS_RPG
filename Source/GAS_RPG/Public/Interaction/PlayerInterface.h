@@ -49,4 +49,12 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void AddToSpellPoints(int32 InSpellPoints);
+	
+	UFUNCTION(BlueprintNativeEvent)
+	int32 GetAttributePointsPoints() const;
+
+	UFUNCTION(BlueprintNativeEvent)
+	int32 GetSpellPoints() const;
+
+	
 };

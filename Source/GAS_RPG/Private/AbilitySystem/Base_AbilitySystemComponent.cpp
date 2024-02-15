@@ -3,8 +3,10 @@
 
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "RPG_GameplayTags.h"
 #include "AbilitySystem/Abilities/RPGGameplayAbility.h"
+#include "Interaction/PlayerInterface.h"
 
 void UBase_AbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -106,6 +108,31 @@ FGameplayTag UBase_AbilitySystemComponent::GetInputTagFromSpec(const FGameplayAb
 		}
 	}
 	return FGameplayTag();
+}
+
+void UBase_AbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	if (GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		if (IPlayerInterface::Execute_GetAttributePointsPoints(GetAvatarActor()) > 0)
+		{
+			ServerUpgradeAttribute(AttributeTag);
+		}
+	}
+}
+
+void UBase_AbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
+{
+	FGameplayEventData Payload;
+	Payload.EventTag = AttributeTag;
+	Payload.EventMagnitude = 1.f;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetAvatarActor(), AttributeTag, Payload);
+
+	if (GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		IPlayerInterface::Execute_AddToAttributePoints(GetAvatarActor(), -1);
+	}
 }
 
 void UBase_AbilitySystemComponent::OnRep_ActivateAbilities()

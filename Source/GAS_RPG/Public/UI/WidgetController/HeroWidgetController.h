@@ -7,7 +7,14 @@
 #include "UObject/Object.h"
 #include "HeroWidgetController.generated.h"
 
+class UAbilityInfo;
+class AHero_PlayerController;
+class AHero_PlayerState;
+class UBase_AbilitySystemComponent;
+class UBase_AttributeSet;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FONPlayerStatsChanged, int32, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FHeroAbilityInfo&, Info);
+
 
 class UAttributeSet;
 class UAbilitySystemComponent;
@@ -45,9 +52,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
 	virtual void BindCallbacksTODependencies();
+	
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Messages")
+	FAbilityInfoSignature AbilityInfoDelegate;
+
+	void BroadcastAbilityInfo();
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category = "Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
+	
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
 
@@ -59,4 +74,23 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UAttributeSet> AttributeSet;
+	
+
+	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
+	TObjectPtr<AHero_PlayerController> HeroPlayerController;
+
+	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
+	TObjectPtr<AHero_PlayerState> HeroPlayerState;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
+	TObjectPtr<UBase_AbilitySystemComponent> HeroAbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
+	TObjectPtr<UBase_AttributeSet> HeroAttributeSet;
+
+	AHero_PlayerController* GetHeroPC();
+	AHero_PlayerState* GetHeroPS();
+	UBase_AbilitySystemComponent* GetHeroASC();
+	UBase_AttributeSet* GetHeroAS();
+	
 };

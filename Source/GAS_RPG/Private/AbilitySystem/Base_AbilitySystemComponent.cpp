@@ -28,7 +28,7 @@ void UBase_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 		}
 	}
 	bStartupAbilitiesGiven = true;
-	AbilitiesGivenDelegate.Broadcast(this);
+	AbilitiesGivenDelegate.Broadcast();
 }
 
 void UBase_AbilitySystemComponent::AddCharacterPassiveAbilities(
@@ -141,7 +141,7 @@ void UBase_AbilitySystemComponent::OnRep_ActivateAbilities()
 	if (!bStartupAbilitiesGiven)
 	{
 		bStartupAbilitiesGiven = true;
-		AbilitiesGivenDelegate.Broadcast(this);
+		AbilitiesGivenDelegate.Broadcast();
 	}
 }
 

@@ -10,18 +10,16 @@
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
-	const UBase_AttributeSet* BaseAttributeSet = CastChecked<UBase_AttributeSet>(AttributeSet);
-	OnHealthChanged.Broadcast(BaseAttributeSet->GetHealth());
-	OnMaxHealthChanged.Broadcast(BaseAttributeSet->GetMaxHealth());
-	OnManaChanged.Broadcast(BaseAttributeSet->GetMana());
-	OnMaxManaChanged.Broadcast(BaseAttributeSet->GetMaxMana());
+	OnHealthChanged.Broadcast(GetHeroAS()->GetHealth());
+	OnMaxHealthChanged.Broadcast(GetHeroAS()->GetMaxHealth());
+	OnManaChanged.Broadcast(GetHeroAS()->GetMana());
+	OnMaxManaChanged.Broadcast(GetHeroAS()->GetMaxMana());
 }
 
 void UOverlayWidgetController::BindCallbacksTODependencies()
 {
-	AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
-	HeroPlayerState->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
-	HeroPlayerState->OnLevelChangedDelegate.AddLambda
+	GetHeroPS()->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
+	GetHeroPS()->OnLevelChangedDelegate.AddLambda
 	(
 		[this](int32 NewValue)
 		{
@@ -59,11 +57,11 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 	{
 		if (BaseASC->bStartupAbilitiesGiven)
 		{
-			OnInitializeStartupAbilities(BaseASC);
+			BroadcastAbilityInfo();
 		}
 		else
 		{
-			BaseASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+			BaseASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastAbilityInfo);
 		}
 		
 		BaseASC->EffectAssetTags.AddLambda(
@@ -83,24 +81,9 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 	}
 }
 
-void UOverlayWidgetController::OnInitializeStartupAbilities(UBase_AbilitySystemComponent* Base_AbilitySystemComponent)
-{
-	if (!Base_AbilitySystemComponent->bStartupAbilitiesGiven) return;
-
-	FForEachAbility BroadcastDelegate;
-	BroadcastDelegate.BindLambda([this, Base_AbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
-	{
-		FHeroAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(Base_AbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
-		Info.InputTag = Base_AbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
-		AbilityInfoDelegate.Broadcast(Info);
-	});
-	Base_AbilitySystemComponent->ForEachAbility(BroadcastDelegate);
-}
-
 void UOverlayWidgetController::OnXPChanged(int32 NewXp)
 {
-	const AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
-	const ULevelUpInfo* LevelUpInfo = HeroPlayerState->LevelUpInfo;
+	const ULevelUpInfo* LevelUpInfo = GetHeroPS()->LevelUpInfo;
 
 	checkf(LevelUpInfo, TEXT("You haven't filled the levelupinfo in Player state. Go and fill it"));
 

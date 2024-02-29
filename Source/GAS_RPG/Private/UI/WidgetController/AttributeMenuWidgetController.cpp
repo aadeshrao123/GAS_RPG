@@ -12,10 +12,8 @@
 
 void UAttributeMenuWidgetController::BindCallbacksTODependencies()
 {
-	Super::BindCallbacksTODependencies();
-	UBase_AttributeSet* AS = Cast<UBase_AttributeSet>(AttributeSet);
-
-	for (auto Pair : AS->TagsToAttribute)
+	check(AttributeInfo);
+	for (auto Pair : GetHeroAS()->TagsToAttribute)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 		[this, Pair](const FOnAttributeChangeData& Data)
@@ -25,14 +23,13 @@ void UAttributeMenuWidgetController::BindCallbacksTODependencies()
 		);
 	}
 
-	AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
-	HeroPlayerState->OnAttributePointsChangedDelegate.AddLambda
+	GetHeroPS()->OnAttributePointsChangedDelegate.AddLambda
 	([this] (const int32 NewValue)
 	{
 		OnAttributePointsChanged.Broadcast(NewValue);
 	}
 	);
-	HeroPlayerState->OnSpellPointsDelegate.AddLambda
+	GetHeroPS()->OnSpellPointsDelegate.AddLambda
 	([this] (const int32 NewValue)
 	{
 		OnSpellPointsChanged.Broadcast(NewValue);
@@ -42,17 +39,14 @@ void UAttributeMenuWidgetController::BindCallbacksTODependencies()
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
-	UBase_AttributeSet* AS = Cast<UBase_AttributeSet>(AttributeSet);
-
 	check(AttributeInfo);
-
-	for (auto Pair : AS->TagsToAttribute)
+	for (auto Pair : GetHeroAS()->TagsToAttribute)
 	{
 		BroadcastInitialInfo(Pair.Key, Pair.Value());
 	}
-	AHero_PlayerState* HeroPlayerState = CastChecked<AHero_PlayerState>(PlayerState);
-	OnAttributePointsChanged.Broadcast(HeroPlayerState->GetAttributePoints());	
-	OnSpellPointsChanged.Broadcast(HeroPlayerState->GetSpellPoints());	
+
+	OnAttributePointsChanged.Broadcast(GetHeroPS()->GetAttributePoints());	
+	OnSpellPointsChanged.Broadcast(GetHeroPS()->GetSpellPoints());	
 }
 
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)

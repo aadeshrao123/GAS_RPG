@@ -12,36 +12,61 @@
 
 UOverlayWidgetController* URPGBlueprintFunctionLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
-	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	FWidgetControllerParams WCParams;
+	AHeroHUD* HeroHUD = nullptr;
+	const bool bSuccessful = MakeWidgetControllerParams(WorldContextObject, WCParams, HeroHUD);
+	if (bSuccessful)
 	{
-		if (AHeroHUD* HeroHUD = Cast<AHeroHUD>(PC->GetHUD()))
-		{
-			AHero_PlayerState* PS = PC->GetPlayerState<AHero_PlayerState>();
-			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
-			UAttributeSet* AS = PS->GetAttributeSet();
-
-			const FWidgetControllerParams WCParams(PC, PS, ASC, AS);
-			return HeroHUD->GetOverlayWidgetController(WCParams);
-		}
+		return HeroHUD->GetOverlayWidgetController(WCParams);
 	}
 	return nullptr;
 }
 
 UAttributeMenuWidgetController* URPGBlueprintFunctionLibrary::GetAttributeMenuWidgetController(const UObject* WorldContextObject)
 {
+	FWidgetControllerParams WCParams;
+	AHeroHUD* HeroHUD = nullptr;
+	const bool bSuccessful = MakeWidgetControllerParams(WorldContextObject, WCParams, HeroHUD);
+	if (bSuccessful)
+	{
+		return HeroHUD->GetAttributeMenuWidgetController(WCParams);
+	}
+	return nullptr;
+}
+
+USpellMenuWidgetController* URPGBlueprintFunctionLibrary::GetSpellMenuWidgetController(
+	const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCParams;
+	AHeroHUD* HeroHUD = nullptr;
+	const bool bSuccessful = MakeWidgetControllerParams(WorldContextObject, WCParams, HeroHUD);
+	if (bSuccessful)
+	{
+		return HeroHUD->GetSpellMenuWidgetController(WCParams);
+	}
+	return nullptr;
+}
+
+bool URPGBlueprintFunctionLibrary::MakeWidgetControllerParams(const UObject* WorldContextObject,
+	FWidgetControllerParams& OutWCParams, AHeroHUD*& OutHUD)
+{
 	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
 	{
-		if (AHeroHUD* HeroHUD = Cast<AHeroHUD>(PC->GetHUD()))
+		OutHUD = Cast<AHeroHUD>(PC->GetHUD());
+		if (OutHUD)
 		{
 			AHero_PlayerState* PS = PC->GetPlayerState<AHero_PlayerState>();
 			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
 			UAttributeSet* AS = PS->GetAttributeSet();
 
-			const FWidgetControllerParams WCParams(PC, PS, ASC, AS);
-			return HeroHUD->GetAttributeMenuWidgetController(WCParams);
+			OutWCParams.PlayerController = PC;
+			OutWCParams.PlayerState = PS;
+			OutWCParams.AttributeSet = AS;
+			OutWCParams.AbilitySystemComponent =  ASC;
+			return true;
 		}
 	}
-	return nullptr;
+	return false;
 }
 
 void URPGBlueprintFunctionLibrary::InitializeDefaultAttribute(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC)

@@ -36,6 +36,7 @@ void UHeroWidgetController::BroadcastAbilityInfo()
 	{
 		FHeroAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(HeroAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
 		Info.InputTag = GetHeroASC()->GetInputTagFromSpec(AbilitySpec);
+		Info.StatusTag = GetHeroASC()->GetStatusFromSpec(AbilitySpec);
 		AbilityInfoDelegate.Broadcast(Info);
 	});
 	GetHeroASC()->ForEachAbility(BroadcastDelegate);

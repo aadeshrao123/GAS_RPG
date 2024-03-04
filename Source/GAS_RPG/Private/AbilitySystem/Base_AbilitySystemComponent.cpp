@@ -5,7 +5,9 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "RPG_GameplayTags.h"
+#include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 #include "AbilitySystem/Abilities/RPGGameplayAbility.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "Interaction/PlayerInterface.h"
 
 void UBase_AbilitySystemComponent::AbilityActorInfoSet()
@@ -123,6 +125,22 @@ FGameplayTag UBase_AbilitySystemComponent::GetStatusFromSpec(const FGameplayAbil
 	return FGameplayTag();
 }
 
+FGameplayAbilitySpec* UBase_AbilitySystemComponent::GetSpecFromAbilityTag(const FGameplayTag& AbilityTag)
+{
+	FScopedAbilityListLock ActiveScopeLoc(*this);
+	for (FGameplayAbilitySpec& Spec : GetActivatableAbilities())
+	{
+		for (FGameplayTag Tag : Spec.Ability.Get()->AbilityTags)
+		{
+			if (Tag.MatchesTag(AbilityTag))
+			{
+				return &Spec;
+			}
+		}
+	}
+	return nullptr;
+}
+
 void UBase_AbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
 {
 	if (GetAvatarActor()->Implements<UPlayerInterface>())
@@ -130,6 +148,23 @@ void UBase_AbilitySystemComponent::UpgradeAttribute(const FGameplayTag& Attribut
 		if (IPlayerInterface::Execute_GetAttributePointsPoints(GetAvatarActor()) > 0)
 		{
 			ServerUpgradeAttribute(AttributeTag);
+		}
+	}
+}
+
+void UBase_AbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
+{
+	UAbilityInfo* AbilityInfo = URPGBlueprintFunctionLibrary::GetAbilityInfo(GetAvatarActor());
+	for (const FHeroAbilityInfo& Info : AbilityInfo->AbilityInformation)
+	{
+		if (!Info.AbilityTag.IsValid()) continue;
+		if (Level < Info.LevelRequirement) continue;
+		if (GetSpecFromAbilityTag(Info.AbilityTag) == nullptr)
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Info.Ability, 1);
+			AbilitySpec.DynamicAbilityTags.AddTag(FRPG_GameplayTags::Get().Abilities_Status_Eligible);
+			GiveAbility(AbilitySpec);
+			MarkAbilitySpecDirty(AbilitySpec);
 		}
 	}
 }

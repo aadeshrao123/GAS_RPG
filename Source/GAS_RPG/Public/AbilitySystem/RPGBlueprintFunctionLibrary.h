@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGBlueprintFunctionLibrary.generated.h"
 
+class UAbilityInfo;
 class AHeroHUD;
 struct FWidgetControllerParams;
 class USpellMenuWidgetController;
@@ -43,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary | CharacterClassDefault")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary | GameplayMechanics")
+	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary | GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);

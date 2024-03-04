@@ -127,10 +127,18 @@ int32 URPGBlueprintFunctionLibrary::GetXPRewardForClassandLevel(const UObject* W
 
 UCharacterClassInfo* URPGBlueprintFunctionLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
 {
-	AHero_GameModeBase* GameMode = Cast<AHero_GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (GameMode)
+	if (AHero_GameModeBase* GameMode = Cast<AHero_GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject)))
 	{
 		return GameMode->CharacterClassInfo;
+	}
+	return nullptr;
+}
+
+UAbilityInfo* URPGBlueprintFunctionLibrary::GetAbilityInfo(const UObject* WorldContextObject)
+{
+	if (AHero_GameModeBase* GameMode = Cast<AHero_GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	{
+		return GameMode->AbilityInfo;
 	}
 	return nullptr;
 }

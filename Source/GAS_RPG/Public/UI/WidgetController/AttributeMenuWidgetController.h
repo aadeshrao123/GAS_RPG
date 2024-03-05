@@ -28,9 +28,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FONPlayerStatsChanged OnAttributePointsChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FONPlayerStatsChanged OnSpellPointsChanged;
-
 	UFUNCTION(BlueprintCallable)
 	void UpgradeAttribute(const FGameplayTag& AttributeTag);
 

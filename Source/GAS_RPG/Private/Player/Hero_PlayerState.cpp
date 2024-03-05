@@ -100,6 +100,6 @@ void AHero_PlayerState::AddAttributePoints(int32 AttributePointsToSet)
 
 void AHero_PlayerState::AddSpellPoints(int32 SpellPointsToSet)
 {
-	SpellPoints = SpellPointsToSet;
+	SpellPoints += SpellPointsToSet;
 	OnSpellPointsDelegate.Broadcast(SpellPoints);
 }

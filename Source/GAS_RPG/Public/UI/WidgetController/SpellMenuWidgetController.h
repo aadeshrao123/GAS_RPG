@@ -16,4 +16,7 @@ class GAS_RPG_API USpellMenuWidgetController : public UHeroWidgetController
 public:
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksTODependencies() override;
+	
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
+	FONPlayerStatsChanged OnSpellPointsChanged;
 };

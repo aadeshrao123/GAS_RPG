@@ -29,12 +29,6 @@ void UAttributeMenuWidgetController::BindCallbacksTODependencies()
 		OnAttributePointsChanged.Broadcast(NewValue);
 	}
 	);
-	GetHeroPS()->OnSpellPointsDelegate.AddLambda
-	([this] (const int32 NewValue)
-	{
-		OnSpellPointsChanged.Broadcast(NewValue);
-	}
-	);
 }
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
@@ -46,7 +40,6 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	}
 
 	OnAttributePointsChanged.Broadcast(GetHeroPS()->GetAttributePoints());	
-	OnSpellPointsChanged.Broadcast(GetHeroPS()->GetSpellPoints());	
 }
 
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)

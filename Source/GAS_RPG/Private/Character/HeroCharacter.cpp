@@ -142,6 +142,11 @@ void AHeroCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 	AHero_PlayerState* HeroPlayerState = GetPlayerState<AHero_PlayerState>();
 	check(HeroPlayerState);
 	HeroPlayerState->AddToLevel(InPlayerLevel);
+
+	if (UBase_AbilitySystemComponent* HeroASC = Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent))
+	{
+		HeroASC->UpdateAbilityStatuses(HeroPlayerState->GetPlayerLevel());
+	}
 }
 
 void AHeroCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)

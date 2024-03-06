@@ -4,6 +4,7 @@
 #include "UI/WidgetController/SpellMenuWidgetController.h"
 
 #include "RPG_GameplayTags.h"
+#include "SkeletalDebugRendering.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "Player/Hero_PlayerState.h"
@@ -16,7 +17,7 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 
 void USpellMenuWidgetController::BindCallbacksTODependencies()
 {
-	GetHeroASC()->AbilityStatusChanged.AddLambda([this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag)
+	GetHeroASC()->AbilityStatusChanged.AddLambda([this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, int32 NewLevel)
 	{
 		if (SelectedAbility.Ability.MatchesTagExact(AbilityTag))
 		{
@@ -79,8 +80,16 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 	SpellGlobeSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquipSpell);
 }
 
+void USpellMenuWidgetController::SpendPointButtonPress()
+{
+	if (GetHeroASC())
+	{
+		GetHeroASC()->ServerSpendSpellPoint(SelectedAbility.Ability);
+	}
+}
+
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoint,
-	bool& bShouldEnableSpendSpellPointsButton, bool& bShouldEnableEquipSpellButton)
+                                                     bool& bShouldEnableSpendSpellPointsButton, bool& bShouldEnableEquipSpellButton)
 {
 	const FRPG_GameplayTags RPGTags = FRPG_GameplayTags::Get();
 	bShouldEnableSpendSpellPointsButton = false;

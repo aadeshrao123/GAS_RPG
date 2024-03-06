@@ -165,8 +165,33 @@ void UBase_AbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 			AbilitySpec.DynamicAbilityTags.AddTag(FRPG_GameplayTags::Get().Abilities_Status_Eligible);
 			GiveAbility(AbilitySpec);
 			MarkAbilitySpecDirty(AbilitySpec);
-			ClientUpdateAbilityStatus(Info.AbilityTag, FRPG_GameplayTags::Get().Abilities_Status_Eligible);
+			ClientUpdateAbilityStatus(Info.AbilityTag, FRPG_GameplayTags::Get().Abilities_Status_Eligible, 1);
 		}
+	}
+}
+
+void UBase_AbilitySystemComponent::ServerSpendSpellPoint_Implementation(const FGameplayTag& AbilityTag)
+{
+	if (FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		if (GetAvatarActor()->Implements<UPlayerInterface>())
+		{
+			IPlayerInterface::Execute_AddToSpellPoints(GetAvatarActor(), -1);
+		}
+		const FRPG_GameplayTags RPGTags = FRPG_GameplayTags::Get();
+		FGameplayTag StatusTag = GetStatusFromSpec(*AbilitySpec);
+		if (StatusTag.MatchesTagExact(RPGTags.Abilities_Status_Eligible))
+		{
+			AbilitySpec->DynamicAbilityTags.RemoveTag(RPGTags.Abilities_Status_Eligible);
+			AbilitySpec->DynamicAbilityTags.AddTag(RPGTags.Abilities_Status_Unlocked);
+			StatusTag = RPGTags.Abilities_Status_Unlocked;
+		}
+		else if (StatusTag.MatchesTagExact(RPGTags.Abilities_Status_Equipped) || StatusTag.MatchesTagExact(RPGTags.Abilities_Status_Unlocked))
+		{
+			AbilitySpec->Level += 1;
+		}
+		ClientUpdateAbilityStatus(AbilityTag, StatusTag, AbilitySpec->Level);
+		MarkAbilitySpecDirty(*AbilitySpec);
 	}
 }
 
@@ -195,9 +220,9 @@ void UBase_AbilitySystemComponent::OnRep_ActivateAbilities()
 }
 
 void UBase_AbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
-	const FGameplayTag& StatusTag)
+	const FGameplayTag& StatusTag, int32 AbilityLevel)
 {
-	AbilityStatusChanged.Broadcast(AbilityTag, StatusTag);
+	AbilityStatusChanged.Broadcast(AbilityTag, StatusTag, AbilityLevel);
 }
 
 void UBase_AbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,

@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpellGlobeSelected(const FGameplayTag& AbilityTag);
 
+	UFUNCTION(BlueprintCallable)
+	void SpendPointButtonPress();
+
 private:
 	static void ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoint, bool& bShouldEnableSpendSpellPointsButton, bool& bShouldEnableEquipSpellButton);
 	FSelectedAbility SelectedAbility = {FRPG_GameplayTags::Get().Abilities_None, FRPG_GameplayTags::Get().Abilities_Status_Locked};

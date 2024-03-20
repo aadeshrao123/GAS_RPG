@@ -170,6 +170,24 @@ void UBase_AbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 	}
 }
 
+bool UBase_AbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription,
+	FString& OutNextLevelDescription)
+{
+	if (const FGameplayAbilitySpec* AbilitySpec= GetSpecFromAbilityTag(AbilityTag))
+	{
+		if (URPGGameplayAbility* RPGAbility = Cast<URPGGameplayAbility>(AbilitySpec->Ability))
+		{
+			OutDescription = RPGAbility->GetDescription(AbilitySpec->Level);
+			OutNextLevelDescription = RPGAbility->GetNextLevelDescription(AbilitySpec->Level + 1);
+			return true;
+		}
+	}
+	UAbilityInfo* AbilityInfo = URPGBlueprintFunctionLibrary::GetAbilityInfo(GetAvatarActor());
+	OutDescription = URPGGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+	OutNextLevelDescription = FString();
+	return false;
+}
+
 void UBase_AbilitySystemComponent::ServerSpendSpellPoint_Implementation(const FGameplayTag& AbilityTag)
 {
 	if (FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))

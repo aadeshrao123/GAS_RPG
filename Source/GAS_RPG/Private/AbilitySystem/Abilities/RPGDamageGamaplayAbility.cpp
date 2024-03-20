@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "RPG_GameplayTags.h"
 
 void URPGDamageGamaplayAbility::CauseDamage(AActor* TargetActor)
 {
@@ -25,4 +26,10 @@ FTaggedMontage URPGDamageGamaplayAbility::GetRandomTaggedMontages(const TArray<F
 		return TaggedMontage[Selection];
 	}
 	return FTaggedMontage();
+}
+
+float URPGDamageGamaplayAbility::GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType)
+{
+	checkf(DamageTypes.Contains(DamageType), TEXT("Gameplay Ability [%s] does not contain [%s]"), *GetNameSafe(this), *DamageType.ToString());
+	return DamageTypes[FRPG_GameplayTags::Get().Damage_Fire].GetValueAtLevel(InLevel);
 }

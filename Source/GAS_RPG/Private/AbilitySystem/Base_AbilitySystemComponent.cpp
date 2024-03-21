@@ -183,6 +183,15 @@ bool UBase_AbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTa
 		}
 	}
 	UAbilityInfo* AbilityInfo = URPGBlueprintFunctionLibrary::GetAbilityInfo(GetAvatarActor());
+
+	if (!AbilityTag.IsValid() || AbilityTag.MatchesTagExact(FRPG_GameplayTags::Get().Abilities_None))
+	{
+		OutDescription = FString();
+	}
+	else
+	{
+		OutDescription = URPGGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+	}
 	OutDescription = URPGGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
 	OutNextLevelDescription = FString();
 	return false;

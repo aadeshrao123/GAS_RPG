@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
+#include "RPG_GameplayTags.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
 #include "AbilitySystem/Base_AttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
@@ -53,18 +54,19 @@ void UOverlayWidgetController::BindCallbacksTODependencies()
 		}
 		);
 
-	if (UBase_AbilitySystemComponent* BaseASC = Cast<UBase_AbilitySystemComponent>(AbilitySystemComponent))
+	if (GetHeroASC())
 	{
-		if (BaseASC->bStartupAbilitiesGiven)
+		GetHeroASC()->AbilityEquipped.AddUObject(this, &UOverlayWidgetController::OnAbilityEquipped);
+		if (GetHeroASC()->bStartupAbilitiesGiven)
 		{
 			BroadcastAbilityInfo();
 		}
 		else
 		{
-			BaseASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastAbilityInfo);
+			GetHeroASC()->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastAbilityInfo);
 		}
 		
-		BaseASC->EffectAssetTags.AddLambda(
+		GetHeroASC()->EffectAssetTags.AddLambda(
 [this](const FGameplayTagContainer& AssetTag)
 		{
 			for (FGameplayTag Tag : AssetTag)
@@ -103,4 +105,23 @@ void UOverlayWidgetController::OnXPChanged(int32 NewXp)
 
 	}
 	
+}
+
+void UOverlayWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status,
+	const FGameplayTag& Slot, const FGameplayTag& PreviousSlot) const
+{
+	const FRPG_GameplayTags RPGTags = FRPG_GameplayTags::Get();
+	FHeroAbilityInfo LastSlotInfo;
+	LastSlotInfo.StatusTag = RPGTags.Abilities_Status_Unlocked;
+	LastSlotInfo.InputTag = PreviousSlot;
+	LastSlotInfo.AbilityTag = RPGTags.Abilities_None;
+
+	//Broadcast empty info if PreviousSlot is a Valid slot. Only if equipping an already-equipped spell
+	
+	AbilityInfoDelegate.Broadcast(LastSlotInfo);
+
+	FHeroAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	Info.StatusTag = Status;
+	Info.InputTag = Slot;
+	AbilityInfoDelegate.Broadcast(Info);
 }

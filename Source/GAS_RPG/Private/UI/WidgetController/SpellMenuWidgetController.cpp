@@ -37,8 +37,10 @@ void USpellMenuWidgetController::BindCallbacksTODependencies()
 			Info.StatusTag = StatusTag;
 			AbilityInfoDelegate.Broadcast(Info);
 		}
-	}
-	);
+	});
+
+	GetHeroASC()->AbilityEquipped.AddUObject(this, &USpellMenuWidgetController::OnAbilityEquipped);
+
 	GetHeroPS()->OnSpellPointsDelegate.AddLambda
 	([this] (const int32 NewValue)
 	{
@@ -122,6 +124,44 @@ void USpellMenuWidgetController::EquipButtonPressed()
 	const FGameplayTag AbilityTypeTag = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
 	WaitForEquipDelegate.Broadcast(AbilityTypeTag);
 	bWaitingForEquipSelection = true;
+
+	const FGameplayTag SelectedStatus = GetHeroASC()->GetStatusFromAbilityTag(SelectedAbility.Ability);
+	if (SelectedStatus.MatchesTagExact(FRPG_GameplayTags::Get().Abilities_Status_Equipped))
+	{
+		SelectedSlot = GetHeroASC()->GetInputFromAbilityTag(SelectedAbility.Ability);
+	}
+}
+
+void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTag, const FGameplayTag& AbilityType)
+{
+	if (!bWaitingForEquipSelection) return;
+
+	const FGameplayTag& SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+	if (!SelectedAbilityType.MatchesTagExact(AbilityType)) return;
+
+	GetHeroASC()->ServerEquipAbility(SelectedAbility.Ability, SlotTag);
+}
+
+void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status,
+	const FGameplayTag& Slot, const FGameplayTag& PreviousSlot)
+{
+	bWaitingForEquipSelection = false;
+	const FRPG_GameplayTags RPGTags = FRPG_GameplayTags::Get();
+	FHeroAbilityInfo LastSlotInfo;
+	LastSlotInfo.StatusTag = RPGTags.Abilities_Status_Unlocked;
+	LastSlotInfo.InputTag = PreviousSlot;
+	LastSlotInfo.AbilityTag = RPGTags.Abilities_None;
+
+	//Broadcast empty info if PreviousSlot is a Valid slot. Only if equipping an already-equipped spell
+	
+	AbilityInfoDelegate.Broadcast(LastSlotInfo);
+
+	FHeroAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	Info.StatusTag = Status;
+	Info.InputTag = Slot;
+	AbilityInfoDelegate.Broadcast(Info);
+
+	StopWaitForEquipDelegate.Broadcast(AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityType);
 }
 
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoint,

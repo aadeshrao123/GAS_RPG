@@ -35,12 +35,6 @@ public:
 	FGameplayTag Attributes_Secondary_MaxHealth; // Represents the vital attribute for Maximum Health, the total health pool.
 	FGameplayTag Attributes_Secondary_MaxMana; // Represents the vital attribute for Maximum Mana, the total mana pool.
 
-	//Resistances
-	FGameplayTag Attributes_Resistance_Fire;
-	FGameplayTag Attributes_Resistance_Lightning;
-	FGameplayTag Attributes_Resistance_Arcane;
-	FGameplayTag Attributes_Resistance_Physical;
-
 	//Meta AttributeTags
 	FGameplayTag Attributes_Meta_IncomingXP;
 	
@@ -81,6 +75,18 @@ public:
 	FGameplayTag Abilities_Fire_FireBolt;
 	FGameplayTag Abilities_Lighting_Electrocute;
 
+	//Debuffs
+	FGameplayTag Debuff_Burn;
+	FGameplayTag Debuff_Stun;
+	FGameplayTag Debuff_Arcane;
+	FGameplayTag Debuff_Physical;
+	
+	//Resistances
+	FGameplayTag Attributes_Resistance_Fire;
+	FGameplayTag Attributes_Resistance_Lightning;
+	FGameplayTag Attributes_Resistance_Arcane;
+	FGameplayTag Attributes_Resistance_Physical;
+
 	//Cooldowns
 	FGameplayTag Cooldown_Fire_FireBolt;
 
@@ -99,6 +105,8 @@ public:
 
 
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
+	
 
 	FGameplayTag HitReact;
 

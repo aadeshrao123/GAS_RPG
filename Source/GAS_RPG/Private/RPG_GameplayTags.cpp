@@ -86,14 +86,17 @@ void FRPG_GameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Debuff_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Arcane"), FString("Debuff Arcane"));
 	GameplayTags.Debuff_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Physical"), FString("Debuff. Physical"));
 
+	GameplayTags.Debuff_Chance = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Chance"), FString("Debuff Chance"));
+	GameplayTags.Debuff_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Damage"), FString("Debuff Damage"));
+	GameplayTags.Debuff_Frequency = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Frequency"), FString("Debuff Frequency"));
+	GameplayTags.Debuff_Duration = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Debuff.Duration"), FString("Debuff Duration"));
+
+
 	//Map of Damage types to Debuffs
 	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Burn,  GameplayTags.Damage_Fire);
 	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Stun,  GameplayTags.Damage_Lightning);
 	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Arcane, GameplayTags.Damage_Arcane);
 	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Physical, GameplayTags.Damage_Physical); 
-
-
-	
 
 	//Cooldowns
 	GameplayTags.Cooldown_Fire_FireBolt = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Cooldown.Fire.FireBolt"),FString("FireBolt Cooldown Tag"));

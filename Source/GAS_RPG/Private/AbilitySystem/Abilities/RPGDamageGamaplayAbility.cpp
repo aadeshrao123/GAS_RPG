@@ -17,6 +17,23 @@ void URPGDamageGamaplayAbility::CauseDamage(AActor* TargetActor)
 	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(*DamageSpecHandle.Data.Get(), UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor));
 }
 
+FDamageEffectParams URPGDamageGamaplayAbility::MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor) const
+{
+	FDamageEffectParams Params;
+	Params.WorldContextObject = GetAvatarActorFromActorInfo();
+	Params.DamageGameplayEffect = DamageEffectClass;
+	Params.SourceAbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
+	Params.TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	Params.BaseDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+	Params.AbilityLevel = GetAbilityLevel();
+	Params.DamageType = DamageType;
+	Params.DebuffChance = DebuffChance;
+	Params.DebuffDamage = DebuffDamage;
+	Params.DebuffDuration = DebuffDuration;
+	Params.DebuffFrequency = DebuffFrequency;
+	return Params;
+}
+
 FTaggedMontage URPGDamageGamaplayAbility::GetRandomTaggedMontages(const TArray<FTaggedMontage>& TaggedMontage) const
 {
 	if (TaggedMontage.Num() > 0)

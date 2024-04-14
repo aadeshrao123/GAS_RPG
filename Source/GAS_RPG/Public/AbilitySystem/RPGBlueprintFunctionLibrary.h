@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RPGAbilityTypes.h"
 #include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGBlueprintFunctionLibrary.generated.h"
@@ -65,6 +66,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary | GameplayMechanics")
 	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|DamageEffect")
+	static FGameplayEffectContextHandle ApplyDamageGameplayEffect(FDamageEffectParams& DamageEffectParams);
+
 
 	static int32 GetXPRewardForClassandLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RPGAbilityTypes.h"
 #include "RPGGameplayAbility.h"
 #include "Interaction/CombatInterface.h"
 #include "RPGDamageGamaplayAbility.generated.h"
@@ -18,6 +19,8 @@ class GAS_RPG_API URPGDamageGamaplayAbility : public URPGGameplayAbility
 public:
 	UFUNCTION(BlueprintCallable)
 	void CauseDamage(AActor* TargetActor);
+
+	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr) const;
 	
 protected:
 	

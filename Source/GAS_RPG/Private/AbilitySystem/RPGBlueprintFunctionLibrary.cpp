@@ -3,7 +3,9 @@
 
 #include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "RPGAbilityTypes.h"
+#include "RPG_GameplayTags.h"
 #include "Game/Hero_GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/Hero_PlayerState.h"
@@ -123,6 +125,25 @@ int32 URPGBlueprintFunctionLibrary::GetXPRewardForClassandLevel(const UObject* W
 	const FCharacterClassDefaultInfo Info = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 	const float XPReward = Info.XPRewardCurveTable.GetValueAtLevel(CharacterLevel);
 	return static_cast<int32>(XPReward);
+}
+
+FGameplayEffectContextHandle URPGBlueprintFunctionLibrary::ApplyDamageGameplayEffect(FDamageEffectParams& DamageEffectParams)
+{
+	FRPG_GameplayTags RPGTags = FRPG_GameplayTags::Get();
+
+	FGameplayEffectContextHandle EffectContextHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor());
+	const FGameplayEffectSpecHandle EffectSpec = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffect, DamageEffectParams.AbilityLevel, EffectContextHandle);
+
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, DamageEffectParams.DamageType, DamageEffectParams.BaseDamage);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, RPGTags.Debuff_Chance, DamageEffectParams.DebuffChance);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, RPGTags.Debuff_Damage, DamageEffectParams.DebuffDamage);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, RPGTags.Debuff_Duration, DamageEffectParams.DebuffDuration);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, RPGTags.Debuff_Frequency, DamageEffectParams.DebuffFrequency);
+	
+	DamageEffectParams.TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());
+
+	return EffectContextHandle;
 }
 
 UCharacterClassInfo* URPGBlueprintFunctionLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)

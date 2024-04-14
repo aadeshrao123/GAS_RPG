@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayEffectTypes.h"
+#include "RPGAbilityTypes.h"
 #include "GameFramework/Actor.h"
 #include "RPGProjectile.generated.h"
 
@@ -18,13 +18,14 @@ class GAS_RPG_API ARPGProjectile : public AActor
 
 public:
 	ARPGProjectile();
+	void OnHit();
 	virtual void Destroyed() override;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
-	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+	FDamageEffectParams DamageEffectParams;
 
 protected:
 	virtual void BeginPlay() override;

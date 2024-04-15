@@ -93,10 +93,10 @@ void FRPG_GameplayTags::InitializeNativeGameplayTags()
 
 
 	//Map of Damage types to Debuffs
-	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Burn,  GameplayTags.Damage_Fire);
-	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Stun,  GameplayTags.Damage_Lightning);
-	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Arcane, GameplayTags.Damage_Arcane);
-	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Debuff_Physical, GameplayTags.Damage_Physical); 
+	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Fire, GameplayTags.Debuff_Burn);
+	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Lightning, GameplayTags.Debuff_Stun);
+	GameplayTags.DamageTypesToDebuffs.Add( GameplayTags.Damage_Arcane, GameplayTags.Debuff_Arcane);
+	GameplayTags.DamageTypesToDebuffs.Add( GameplayTags.Damage_Physical, GameplayTags.Debuff_Physical); 
 
 	//Cooldowns
 	GameplayTags.Cooldown_Fire_FireBolt = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Cooldown.Fire.FireBolt"),FString("FireBolt Cooldown Tag"));

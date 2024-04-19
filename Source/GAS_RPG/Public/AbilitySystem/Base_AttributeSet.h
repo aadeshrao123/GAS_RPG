@@ -236,6 +236,9 @@ public:
 
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
+	void HandleIncomingDamage(FEffectProperties Props);
+	void HandleIncomingXP(FEffectProperties Props);
+	void Debuff(FEffectProperties Props);
 	void SetFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
 	void SendXPEvent(const FEffectProperties& Props) const;
 

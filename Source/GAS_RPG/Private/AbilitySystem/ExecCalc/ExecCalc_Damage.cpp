@@ -92,7 +92,17 @@ void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParam
 			const bool bDebuff = FMath::RandRange(1, 100) < EffectiveDebuffChance;
 			if (bDebuff)
 			{
-				
+				FGameplayEffectContextHandle EffectContext = EffectSpec.GetContext();
+				URPGBlueprintFunctionLibrary::SetIsSuccessfulDebuff(EffectContext, true);
+				URPGBlueprintFunctionLibrary::SetDamageType(EffectContext, DamageType);
+
+				const float DebuffDamage = EffectSpec.GetSetByCallerMagnitude(RPGTags.Debuff_Damage, false, -1);
+				const float DebuffDuration = EffectSpec.GetSetByCallerMagnitude(RPGTags.Debuff_Duration, false, -1);
+				const float DebuffFrequency = EffectSpec.GetSetByCallerMagnitude(RPGTags.Debuff_Frequency, false, -1);
+
+				URPGBlueprintFunctionLibrary::SetDebuffDamage(EffectContext, DebuffDamage);
+				URPGBlueprintFunctionLibrary::SetDebuffDuration(EffectContext, DebuffDuration);
+				URPGBlueprintFunctionLibrary::SetDebuffFrequency(EffectContext, DebuffFrequency);
 			}
 		}
 	}

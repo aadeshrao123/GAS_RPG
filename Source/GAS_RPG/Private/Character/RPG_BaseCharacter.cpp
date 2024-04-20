@@ -7,6 +7,7 @@
 #include "RPGAbilityTypes.h"
 #include "RPG_GameplayTags.h"
 #include "AbilitySystem/Base_AbilitySystemComponent.h"
+#include "AbilitySystem/Debuff/DebuffNiagaraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
 #include "Kismet/GameplayStatics.h"
@@ -24,6 +25,10 @@ ARPG_BaseCharacter::ARPG_BaseCharacter()
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), "HandWeaponSocket");
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	BurnDebuffComponent = CreateDefaultSubobject<UDebuffNiagaraComponent>("DebuffNiagaraComponent");
+	BurnDebuffComponent->SetupAttachment(GetRootComponent());
+	BurnDebuffComponent->DebuffTag = FRPG_GameplayTags::Get().Debuff_Burn;
 }
 
 UAbilitySystemComponent* ARPG_BaseCharacter::GetAbilitySystemComponent() const
@@ -58,6 +63,7 @@ void ARPG_BaseCharacter::MulticastHandelDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
 	bDead = true;
+	OnDeath.Broadcast(this);
 }
 
 void ARPG_BaseCharacter::BeginPlay()
@@ -134,6 +140,16 @@ void ARPG_BaseCharacter::IncrementtMinionCount_Implementation(int32 Amount)
 ECharacterClass ARPG_BaseCharacter::GetCharacterClass_Implementation()
 {
 	return CharacterClass;
+}
+
+FOnASCRegistered ARPG_BaseCharacter::GetOnAscRegisteredDelegate()
+{
+	return OnASCRegistered;
+}
+
+FOnDeath ARPG_BaseCharacter::GetOnDeathDelegate()
+{
+	return OnDeath;
 }
 
 void ARPG_BaseCharacter::InitAbilityActorInfo()

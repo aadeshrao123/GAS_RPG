@@ -8,6 +8,7 @@
 #include "RPG_GameplayTags.h"
 #include "AbilitySystem/RPGBlueprintFunctionLibrary.h"
 #include "GameFramework/Character.h"
+#include "GameplayEffectComponents/TargetTagsGameplayEffectComponent.h"
 #include "Interaction/CombatInterface.h"
 #include "Interaction/PlayerInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -188,7 +189,12 @@ void UBase_AttributeSet::Debuff(FEffectProperties Props)
 	Effect->Period = DebuffFrequency;
 	Effect->DurationMagnitude = FScalableFloat(DebuffDuration);
 
-	Effect->InheritableOwnedTagsContainer.AddTag(RPGTags.DamageTypesToDebuffs[DamageType]);
+	FInheritedTagContainer InheritedTagContainer = FInheritedTagContainer();
+	UTargetTagsGameplayEffectComponent& TargetTagsGameplayEffectComponent = Effect->FindOrAddComponent<UTargetTagsGameplayEffectComponent>();
+	InheritedTagContainer.Added.AddTag(RPGTags.DamageTypesToDebuffs[DamageType]);
+	InheritedTagContainer.CombinedTags.AddTag(RPGTags.DamageTypesToDebuffs[DamageType]);
+	TargetTagsGameplayEffectComponent.SetAndApplyTargetTagChanges(InheritedTagContainer);
+	
 	Effect->StackingType = EGameplayEffectStackingType::AggregateBySource;
 	Effect->StackLimitCount = 1;
 

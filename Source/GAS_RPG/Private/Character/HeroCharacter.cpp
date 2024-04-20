@@ -50,6 +50,7 @@ void AHeroCharacter::InitAbilityActorInfo()
 	Cast<UBase_AbilitySystemComponent>(HeroPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = HeroPlayerState->GetAbilitySystemComponent();
 	AttributeSet = HeroPlayerState->GetAttributeSet();
+	OnASCRegistered.Broadcast(AbilitySystemComponent);
 
 	if (AHero_PlayerController* Hero_PlayerController = Cast<AHero_PlayerController>(GetController()))
 	{

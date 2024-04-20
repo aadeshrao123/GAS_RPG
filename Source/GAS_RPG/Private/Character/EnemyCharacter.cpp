@@ -118,6 +118,7 @@ void AEnemyCharacter::InitAbilityActorInfo()
 	{
 		InitializeDefaultAttributes();
 	}
+	OnASCRegistered.Broadcast(AbilitySystemComponent);
 }
 
 void AEnemyCharacter::InitializeDefaultAttributes() const

@@ -172,7 +172,42 @@ void UBase_AttributeSet::HandleIncomingDamage(FEffectProperties Props)
 
 void UBase_AttributeSet::Debuff(FEffectProperties Props)
 {
-	
+	FRPG_GameplayTags RPGTags = FRPG_GameplayTags::Get();
+	FGameplayEffectContextHandle EffectContextHandle = Props.SourceASC->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(Props.SourceAvatarActor);
+
+	const FGameplayTag DamageType = URPGBlueprintFunctionLibrary::GetDamageType(Props.EffectContextHandel);
+	const float DebuffDamage = URPGBlueprintFunctionLibrary::GetDebuffDamage(Props.EffectContextHandel);
+	const float DebuffDuration = URPGBlueprintFunctionLibrary::GetDebuffDuration(Props.EffectContextHandel);
+	const float DebuffFrequency = URPGBlueprintFunctionLibrary::GetDebuffFrequency(Props.EffectContextHandel);
+
+	FString DebuffName = FString::Printf(TEXT("DynamicDebuff_%s"),*DamageType.ToString());
+	UGameplayEffect* Effect = NewObject<UGameplayEffect>(GetTransientPackage(), FName(DebuffName));
+
+	Effect->DurationPolicy = EGameplayEffectDurationType::HasDuration;
+	Effect->Period = DebuffFrequency;
+	Effect->DurationMagnitude = FScalableFloat(DebuffDuration);
+
+	Effect->InheritableOwnedTagsContainer.AddTag(RPGTags.DamageTypesToDebuffs[DamageType]);
+	Effect->StackingType = EGameplayEffectStackingType::AggregateBySource;
+	Effect->StackLimitCount = 1;
+
+	const int32 Index = Effect->Modifiers.Num();
+	Effect->Modifiers.Add(FGameplayModifierInfo());
+	FGameplayModifierInfo& ModiferInfo = Effect->Modifiers[Index];
+
+	ModiferInfo.ModifierMagnitude = FScalableFloat(DebuffDamage);
+	ModiferInfo.ModifierOp = EGameplayModOp::Additive;
+	ModiferInfo.Attribute = GetIncomingDamageAttribute();
+
+	FGameplayEffectSpec* MutableSpec = new FGameplayEffectSpec(Effect, EffectContextHandle, 1.f);
+	if (MutableSpec)
+	{
+		FRPGGameplayEffectContext* RPGContext = static_cast<FRPGGameplayEffectContext*>(MutableSpec->GetContext().Get());
+		TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
+		RPGContext->SetDamageType(DebuffDamageType);
+		Props.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
+	}
 }
 
 void UBase_AttributeSet::HandleIncomingXP(FEffectProperties Props)
@@ -214,6 +249,8 @@ void UBase_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	Super::PostGameplayEffectExecute(Data);
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
+
+	if(Props.TargetCharacter->Implements<UCombatInterface>() && ICombatInterface::Execute_IsDead(Props.TargetCharacter)) return;
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
